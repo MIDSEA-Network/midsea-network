@@ -22,7 +22,14 @@ listing:
     field-display-names:
       event-dates: "Date"
     feed: false
+date: last-modified
 ---
+
+<style>
+/* The date front-matter is only used to power the "Published" line in the
+   page footer below; hide Quarto's default title-block rendering of it. */
+#title-block-header { display: none; }
+</style>
 
 ::: {.hero-banner}
 # A regional network for shared challenges
@@ -53,3 +60,7 @@ Researchers, students, public health professionals, and decision-makers
 from across the region working on infectious disease modelling.
 
 [Browse the People directory &rarr;](people/index.qmd)
+
+::: {.page-published}
+Last rendered: {{< meta date >}}
+:::
