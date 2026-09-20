@@ -14,5 +14,7 @@ categories: [Seminars]
 # e.g. categories: [Seminars, Upcoming]
 ---
 
+![](../images/events/REPLACE-ME.jpg)
+
 Write the full event details here: agenda, speakers, registration links,
 etc.

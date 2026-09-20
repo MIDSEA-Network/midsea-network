@@ -8,6 +8,8 @@ description: "A week of parallel tracks on foundational and advanced infectious 
 categories: [Summer School, Past]
 ---
 
+![](../images/events/summer-school-2025.jpg)
+
 A week of parallel tracks on foundational and advanced infectious disease
 modelling, hosted by Universitas Gadjah Mada, with networking opportunities
 across Southeast Asia and beyond.

@@ -6,7 +6,7 @@ image: ../images/news/REPLACE-ME.jpg
 description: "One or two sentences that show up on the News page card."
 ---
 
+![](../images/news/REPLACE-ME.jpg)
+
 Write the full story here using plain text / Markdown. You can add more
 paragraphs, links, and images as needed.
-
-![Optional extra photo](../images/news/REPLACE-ME.jpg)

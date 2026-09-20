@@ -8,6 +8,8 @@ description: "Join us on Tuesday 29 September for a series of talks on climate a
 categories: [Online Events, Seminars, Upcoming]
 ---
 
+![](../images/events/climate-health-webinar.jpeg)
+
 Join us on Tuesday 29 September for a series of talks on climate and health
 modelling.
 

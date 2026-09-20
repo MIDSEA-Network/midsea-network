@@ -8,6 +8,8 @@ description: "An early MIDSEA Network gathering bringing together modellers from
 categories: [Seminars, Past]
 ---
 
+![](../images/events/koh-samui-2023.jpg)
+
 An early MIDSEA Network gathering in Koh Samui, Thailand, bringing together
 modellers from across the region.
 
