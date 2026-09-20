@@ -24,8 +24,8 @@ website:
         text: People
       - href: events/index.qmd
         text: Events
-      # - href: training/index.qmd
-      #   text: Training
+      - href: training/index.qmd
+        text: Training
       - href: contact/index.qmd
         text: Contact
     right:
