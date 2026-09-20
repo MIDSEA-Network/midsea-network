@@ -1,0 +1,38 @@
+---
+# ── Copy this file into the training/ folder and rename it, e.g. training/2026-01-my-programme.qmd ──
+title: "Title of the training programme"
+date: 2026-01-01
+# For date ranges, use the start date above and describe the range in
+# event-dates below so it displays nicely, e.g. "22 - 29 June 2026".
+event-dates: "1 January 2026"
+location: "Venue name, City, Country (leave blank for online programmes)"
+image: ../images/training/REPLACE-ME.jpg
+description: "One or two sentences that show up on the Training page card."
+---
+
+Write an introduction to the programme here.
+
+### What's included
+
+- List what's included: sessions, workshops, meals, certificate, etc.
+
+### Programme schedule
+
+| Day | Date | Activity |
+|---|---|---|
+| | | |
+
+### Registration fees
+
+| Category | Accommodation | Fee (USD) |
+|---|---|---|
+| | | |
+
+### Scholarships
+
+Describe scholarship eligibility and how/when applicants are notified, if
+applicable. Delete this section if the programme has no scholarships.
+
+### How to register
+
+Explain how and by when to register.

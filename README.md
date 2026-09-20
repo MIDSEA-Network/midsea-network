@@ -18,10 +18,12 @@ Each tab lives in its own folder, with `index.qmd` as that section's page:
   currently empty, pending import from the existing Google Form/Sheet
 - **Events** (`events/index.qmd` + one file per event alongside it in
   `events/`), with Online Events / Seminars / Summer School filters
-- **Training** (`training/index.qmd`) — static, edited per cohort
+- **Training** (`training/index.qmd` + one file per programme alongside it
+  in `training/`)
 - **Contact** (`contact/index.qmd`) — static
 
-`_templates/` holds starter files to copy when adding a news post or event.
+`_templates/` holds starter files to copy when adding a news post, event,
+or training programme.
 
 ## Local development
 

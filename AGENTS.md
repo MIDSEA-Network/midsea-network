@@ -32,15 +32,19 @@ people/index.qmd        People directory — renders people/people.csv as
 people/people.csv        One row per person: name, title, institution,
                           photo, profile_url
 contact/index.qmd       Static
-training/index.qmd      Static (currently commented out of the navbar —
-                          see _quarto.yml)
+training/index.qmd      Training listing page (Quarto `listing`, currently
+                          commented out of the navbar — see _quarto.yml)
+training/*.qmd            One file per training programme (front matter:
+                          title, date, event-dates, location, image,
+                          description)
 legal/index.qmd         Static (currently commented out of the navbar)
 branding/index.qmd      Static (currently commented out of the navbar)
 _templates/              Starter files for copy-pasting new news posts /
-                          events (news-template.qmd, event-template.qmd) —
-                          the leading underscore keeps Quarto from
-                          rendering or listing them as content
-images/                  logos/, news/, events/, people/ — see
+                          events / training programmes (news-template.qmd,
+                          event-template.qmd, training-template.qmd) — the
+                          leading underscore keeps Quarto from rendering or
+                          listing them as content
+images/                  logos/, news/, events/, training/, people/ — see
                           "Resource copying" below for why this whole tree
                           must stay declared in _quarto.yml
 _quarto.yml               Site config: navbar, footer, theme, project
@@ -54,10 +58,10 @@ styles.scss               Brand theme; the whole palette derives from one
 
 ## Content-model conventions — follow these when adding features
 
-- **News/events are one file per item**, discovered automatically by a
-  Quarto `listing` block in that section's `index.qmd`. Don't hand-write
-  card markup — add a `.qmd` file with the right front matter fields
-  (copy `_templates/`) and the listing picks it up.
+- **News/events/training are one file per item**, discovered automatically
+  by a Quarto `listing` block in that section's `index.qmd`. Don't
+  hand-write card markup — add a `.qmd` file with the right front matter
+  fields (copy `_templates/`) and the listing picks it up.
 - **A listing page's `contents:` is relative to its own file**, and since
   `news/index.qmd` / `events/index.qmd` live *inside* the folder they
   list, their `contents:` is `.` (not `news`/`events`). Quarto
@@ -78,8 +82,8 @@ styles.scss               Brand theme; the whole palette derives from one
   profile_url`. Don't convert this to individual per-person `.qmd` files
   without discussing it — that was a considered tradeoff, not an
   oversight.
-- **Training/Contact/Legal/Branding are single static pages**, edited
-  directly — they're one-off content, not a repeating collection, so they
+- **Contact/Legal/Branding are single static pages**, edited directly —
+  they're one-off content, not a repeating collection, so they
   intentionally don't use the listing pattern.
 
 ## Path gotchas (things that will silently break)

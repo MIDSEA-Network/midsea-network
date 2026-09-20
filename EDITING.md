@@ -55,6 +55,17 @@ You do not need to move an event from "Upcoming" to "Past". After the event,
 update its `categories` tag. (Or leave the tag. The site sorts by date in
 both cases.)
 
+## Add a training programme
+
+Same method again. Copy `_templates/training-template.qmd` into `training/`:
+
+- `title`, `date` (`YYYY-MM-DD`, used for sorting), `event-dates`,
+  `location`, `image`, `description` — same meaning as for events.
+- Write the full programme details below the `---` line: what's included,
+  the schedule, fees, scholarships, and how to register. Use or delete the
+  template's section headings as needed — not every programme has
+  scholarships, for example.
+
 ## Edit the People directory
 
 The file `people/people.csv` lists all people. It is a spreadsheet-style
@@ -81,12 +92,11 @@ columns to `name, title, institution, photo, profile_url, email` (or edit
 `people/index.qmd` to keep the sheet's own column names). Then replace
 `people/people.csv` with the export.
 
-## Edit the Training or Contact page text
+## Edit the Contact page text
 
-You edit `training/index.qmd` and `contact/index.qmd` directly. Open the
-file, change the text or tables, and commit. These pages have no template
-because their content is one-off per cohort or announcement, not a repeating
-list.
+You edit `contact/index.qmd` directly. Open the file, change the text, and
+commit. This page has no template because its content is one-off, not a
+repeating list.
 
 ## Change the logo, the favicon, or the colours
 
