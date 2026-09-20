@@ -1,0 +1,18 @@
+---
+title: "News"
+page-layout: full
+title-block-banner: true
+listing:
+  contents: .
+  type: grid
+  sort: "date desc"
+  date-format: "D MMMM YYYY"
+  fields: [image, date, title, description]
+  feed: false
+---
+
+<!--
+To add a news item: copy _templates/news-template.qmd into this news/
+folder, rename it, and fill in the title/date/image/description. See
+EDITING.md for the full walkthrough.
+-->
