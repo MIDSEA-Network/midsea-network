@@ -1,6 +1,11 @@
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - AGENTS.md
+      - EDITING.md
+      - README.md
+      - .gitignore
   workflow_dispatch: {}
 
 name: Publish site
