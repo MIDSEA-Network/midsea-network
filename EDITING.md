@@ -1,100 +1,100 @@
 # Editing the MIDSEA Network website
 
-This site is built with [Quarto](https://quarto.org). You do **not** need to
-know how to code to update most content — you're editing plain text files
-with a few `field: value` lines at the top, the same idea as filling in a
-form.
+This site uses [Quarto](https://quarto.org). You do **not** need to know how
+to code to update most content. Each content item is a plain text file. A few
+`field: value` lines at the top work like a form.
 
-The easiest way to make small edits is directly on GitHub, in your browser,
-with no software to install:
+For small edits, use GitHub in your browser. You do not need to install
+software:
 
-1. Go to the file you want to change on the repository's GitHub page.
-2. Click the pencil ("Edit this file") icon.
+1. Open the file you want to change on the repository's GitHub page.
+2. Click the pencil icon ("Edit this file").
 3. Make your change.
-4. Scroll down, add a short message describing the change, and click
+4. Scroll down. Write a short message that describes the change. Click
    "Commit changes directly to the `main` branch."
-5. Wait 2-3 minutes — the site rebuilds and publishes automatically. No
-   further action needed.
+5. Wait 2-3 minutes. The site rebuilds and publishes automatically. You do
+   not need to do anything else.
 
-If you'd rather work locally, install Quarto
-(<https://quarto.org/docs/get-started/>), then from the project folder run
-`quarto preview` to see your changes live before committing/pushing.
+To work on your computer instead, install Quarto
+(<https://quarto.org/docs/get-started/>). Then run `quarto preview` in the
+project folder to see your changes before you commit or push.
 
 ---
 
 ## Add a news item
 
 1. Open the `_templates/news-template.qmd` file.
-2. Copy it into the `news/` folder and rename it, e.g.
-   `news/2026-03-my-update.qmd` (the filename doesn't matter much, but
-   starting it with the date keeps the folder tidy).
+2. Copy it into the `news/` folder. Give it a new name, for example
+   `news/2026-03-my-update.qmd`. The filename does not matter much, but a
+   date at the start keeps the folder tidy.
 3. Fill in the fields at the top of the file:
-   - `title` — headline shown on the News page
-   - `date` — format `YYYY-MM-DD`, controls sort order
-   - `image` — path to a photo (add the photo file to `images/news/` first)
-   - `description` — one or two sentences shown on the card
+   - `title` — the headline on the News page
+   - `date` — the date in `YYYY-MM-DD` format. The site sorts by this date.
+   - `image` — the path to a photo. Add the photo file to `images/news/`
+     first.
+   - `description` — one or two sentences. The card shows these sentences.
 4. Write the full story below the `---` line.
-5. Commit. It will appear automatically on the News page and Home page,
+5. Commit. The News page and Home page show the new item automatically,
    newest first.
 
 ## Add an event
 
-Same idea, using `_templates/event-template.qmd` copied into `events/`:
+Same method. Copy `_templates/event-template.qmd` into `events/`:
 
 - `title`, `date` (`YYYY-MM-DD`, used for sorting), `image`, `description` —
   same as news.
-- `event-dates` — the human-readable date text shown on the card, e.g.
+- `event-dates` — the date text on the card, for example
   `"22 - 29 June 2026"` for multi-day events.
-- `location` — venue and city, or leave as `"Online"` for online events.
+- `location` — the venue and city. Use `"Online"` for online events.
 - `categories` — a list of tags. Use one or more of `Online Events`,
-  `Seminars`, `Summer School` so the event shows up under the right filter
-  button on the Events page, **plus** `Upcoming` or `Past` so those filter
-  chips work too, e.g. `categories: [Seminars, Upcoming]`.
+  `Seminars`, `Summer School` so the event appears under the correct filter
+  button on the Events page. Also add `Upcoming` or `Past` so the filter
+  chips work. Example: `categories: [Seminars, Upcoming]`.
 
-There's no need to move an event from "Upcoming" to "Past" — just update its
-`categories` tag once it has happened (or leave it; it will keep sorting
-correctly by date either way).
+You do not need to move an event from "Upcoming" to "Past". After the event,
+update its `categories` tag. (Or leave the tag. The site sorts by date in
+both cases.)
 
 ## Edit the People directory
 
-People are listed in a single spreadsheet-style file, `people/people.csv`,
-with one row per person and columns: `name, title, institution, photo,
-profile_url, email`.
+The file `people/people.csv` lists all people. It is a spreadsheet-style
+file with one row per person. The columns are `name, title, institution,
+photo, profile_url, email`.
 
-- Open `people/people.csv` (works in Excel, Google Sheets, Numbers, or
-  GitHub's built-in editor).
-- Add/edit/remove rows. Leave `profile_url` blank if the person doesn't have
-  a profile page.
+- Open `people/people.csv` (Excel, Google Sheets, Numbers, and GitHub's
+  built-in editor all work).
+- Add, edit, or remove rows. Leave `profile_url` blank if the person does
+  not have a profile page.
 - Profile picture, in order of preference:
-  - Add a photo to `images/people/` and reference it in `photo` starting
-    with a `/`, e.g. `/images/people/jane-example.jpg`.
-  - Otherwise, leave `photo` blank and fill in `email` — the site will show
-    that person's [Gravatar](https://gravatar.com) (the avatar tied to their
-    email at gravatar.com), if they have one set up.
-  - If both `photo` and `email` are blank, or the email has no Gravatar, a
-    generic placeholder avatar is shown instead.
+  - Add a photo to `images/people/`. In `photo`, write the path with a `/`
+    at the start, for example `/images/people/jane-example.jpg`.
+  - Otherwise, leave `photo` blank and fill in `email`. The site then shows
+    that person's [Gravatar](https://gravatar.com), if they set one up. A
+    Gravatar is the avatar tied to their email at gravatar.com.
+  - If `photo` and `email` are blank, or the email has no Gravatar, the site
+    shows a generic placeholder avatar.
 - Save as CSV and commit.
 
-**Importing from the Google Form/Sheet:** once that's ready, export the
-Google Sheet as CSV (File → Download → Comma-separated values), rename the
-columns to match `name, title, institution, photo, profile_url, email` (or
-edit `people/index.qmd` if you'd rather keep the sheet's own column names),
-and replace `people/people.csv` with the export.
+**Importing from the Google Form/Sheet:** When that is ready, export the
+Google Sheet as CSV (File → Download → Comma-separated values). Rename the
+columns to `name, title, institution, photo, profile_url, email` (or edit
+`people/index.qmd` to keep the sheet's own column names). Then replace
+`people/people.csv` with the export.
 
-## Edit Training or Contact page text
+## Edit the Training or Contact page text
 
-`training/index.qmd` and `contact/index.qmd` are edited directly — open the
-file, change the text/tables, commit. There's no template for these since
-the content is mostly one-off per cohort/announcement rather than a
-repeating list.
+You edit `training/index.qmd` and `contact/index.qmd` directly. Open the
+file, change the text or tables, and commit. These pages have no template
+because their content is one-off per cohort or announcement, not a repeating
+list.
 
-## Change the logo, favicon, or colours
+## Change the logo, the favicon, or the colours
 
-- Logo/favicon: replace the files in `images/logos/` (keep the same
-  filenames, or update the two references in `_quarto.yml` under
-  `website.navbar.logo` / `website.favicon`).
+- Logo/favicon: replace the files in `images/logos/`. Keep the same
+  filenames. If you use new filenames, update the two references in
+  `_quarto.yml` under `website.navbar.logo` and `website.favicon`.
 - Brand colour: change the `$midsea-purple` value at the top of
-  `styles.scss` — everything else (navbar, links, buttons) follows from it.
+  `styles.scss`. Everything else (navbar, links, buttons) follows from it.
 
 ## Site navigation (the tabs across the top)
 
