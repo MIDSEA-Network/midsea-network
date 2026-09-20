@@ -1,0 +1,68 @@
+---
+title: "Training"
+page-layout: article
+title-block-banner: true
+---
+
+## MIDSEA Summer School 2025
+
+**23 - 29 June 2025 · Yogyakarta, Indonesia**, hosted by Universitas Gadjah
+Mada, following on from a successful 2024 event in Vietnam.
+
+- Parallel tracks addressing both foundational and advanced disease
+  modelling concepts
+- Networking opportunities with modellers across Southeast Asia and beyond
+
+### What's included
+
+- Seven days of sessions
+- Keynote speakers
+- Hands-on workshops
+- Networking meals
+- Open discussion forums
+- Coffee and tea breaks
+- Certificate of attendance
+
+### Programme schedule
+
+| Day | Date | Activity |
+|---|---|---|
+| Sunday | 22 June | Arrival |
+| Monday - Saturday | 23 - 28 June | Morning classes (Modelling 101, Simulation, Inference, AI, Specialised topics) and afternoon workshops |
+| Wednesday | 25 June | Excursion day |
+| Sunday - Monday | 29 - 30 June | Conference and departure |
+
+### Registration fees
+
+| Category | Accommodation | Fee (USD) |
+|---|---|---|
+| LMIC | Twin share | 600 |
+| LMIC | Single | 900 |
+| HIC | Twin share | 1200 |
+| HIC | Single | 1600 |
+
+Fees vary by region and accommodation type. LMIC/HIC classifications follow
+the World Bank's country classifications.
+
+### Scholarships
+
+A limited number of scholarships are available. To be eligible, applicants
+must:
+
+- Be residents of an LMIC (as classified by the World Bank)
+- Self-fund their own travel
+- Commit to attending the full programme
+- Accept twin-share accommodation
+
+Scholarship notifications go out by 14 April 2025.
+
+### How to register
+
+Complete [the registration form linked here](#) by 2 April 2025. Early
+submission is encouraged as places are limited.
+
+::: {.callout-tip}
+**Editing note:** this page is edited directly, cohort by cohort — update
+the dates, tables, and registration link above each time a new Summer
+School (or other training programme) is announced. See `EDITING.md`.
+:::

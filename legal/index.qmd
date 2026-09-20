@@ -1,0 +1,9 @@
+---
+title: "Legal"
+page-layout: article
+title-block-banner: true
+---
+
+Legal notices for The MIDSEA Network, National University of Singapore.
+
+*(Replace this text with the actual legal notices from the current site.)*
