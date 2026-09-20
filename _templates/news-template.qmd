@@ -1,0 +1,12 @@
+---
+# ── Copy this file into the news/ folder and rename it, e.g. news/2026-01-my-update.qmd ──
+title: "Title of the news item"
+date: 2026-01-01
+image: ../images/news/REPLACE-ME.jpg
+description: "One or two sentences that show up on the News page card."
+---
+
+Write the full story here using plain text / Markdown. You can add more
+paragraphs, links, and images as needed.
+
+![Optional extra photo](../images/news/REPLACE-ME.jpg)

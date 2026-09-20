@@ -1,0 +1,18 @@
+---
+# ── Copy this file into the events/ folder and rename it, e.g. events/2026-01-my-event.qmd ──
+title: "Title of the event"
+date: 2026-01-01
+# For date ranges, use the start date above and describe the range in
+# event-dates below so it displays nicely, e.g. "22 - 29 June 2026".
+event-dates: "1 January 2026"
+location: "Venue name, City, Country (leave blank for online events)"
+image: ../images/events/REPLACE-ME.jpg
+description: "One or two sentences that show up on the Events page card."
+categories: [Seminars]
+# Pick one or more tags from: Online Events, Seminars, Summer School.
+# Also add "Upcoming" or "Past" so the filter chips on the Events page work,
+# e.g. categories: [Seminars, Upcoming]
+---
+
+Write the full event details here: agenda, speakers, registration links,
+etc.
