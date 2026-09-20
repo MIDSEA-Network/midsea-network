@@ -37,8 +37,6 @@ website:
         href: contact/index.qmd
       # - text: "Legal"
       #   href: legal/index.qmd
-      # - text: "Branding Guidelines"
-      #   href: branding/index.qmd
     right:
       - text: "barathi.vadivelu@nus.edu.sg"
         href: "mailto:barathi.vadivelu@nus.edu.sg"
