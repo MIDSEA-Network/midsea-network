@@ -1,20 +1,59 @@
 /*-- scss:defaults --*/
 
-// MIDSEA Network brand colour (purple). Change this one line to re-theme
-// the whole site.
-$midsea-purple: #5b2a86;
+// MIDSEA Network brand colours, matching the palette used on the live
+// midsea.network site: purple as the primary/brand colour, orange as the
+// hover/accent colour.
+$midsea-purple: #7a2cbf;
+$midsea-orange: #ff8940;
+$midsea-text: #1f2933;
 
 $primary: $midsea-purple;
 $link-color: $midsea-purple;
 $navbar-bg: $midsea-purple;
 $navbar-fg: #ffffff;
-$navbar-hl: #f3d9ff;
+$navbar-hl: $midsea-orange;
 $footer-bg: #f7f5fa;
+$body-color: $midsea-text;
 
 /*-- scss:rules --*/
 
 .navbar-title {
   font-weight: 700;
+}
+
+// Animated underline that grows in from the left on hover/active, echoing
+// the underline hover style used on midsea.network's nav menu.
+.navbar .nav-link {
+  position: relative;
+}
+
+.navbar .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  width: 0;
+  height: 2px;
+  background-color: $midsea-orange;
+  transition: width 0.25s ease-in-out;
+}
+
+.navbar .nav-link:hover::after,
+.navbar .nav-link.active::after {
+  width: 100%;
+}
+
+// In-content links (news/events recaps, home page CTAs, etc.) get a
+// colour shift and underline on hover instead of the static default.
+main a:not(.nav-link):not(.quarto-grid-link):not(.navbar-brand) {
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease-in-out, text-decoration-color 0.2s ease-in-out;
+}
+
+main a:not(.nav-link):not(.quarto-grid-link):not(.navbar-brand):hover {
+  color: $midsea-orange;
+  text-decoration-color: $midsea-orange;
 }
 
 .hero-banner {
@@ -32,9 +71,62 @@ $footer-bg: #f7f5fa;
   }
 }
 
+// Listing cards (News/Events/Training): soft asymmetric corners plus a
+// lift + shadow + image zoom on hover, echoing the card treatment on
+// midsea.network.
+.quarto-grid-item.card {
+  overflow: hidden;
+  border: none;
+  border-radius: 28px 8px 28px 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+}
+
+.quarto-grid-item.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba($midsea-purple, 0.18);
+}
+
 .card-img-top {
   object-fit: cover;
   height: 180px;
+  overflow: hidden;
+
+  img {
+    transition: transform 0.5s ease-in-out;
+  }
+}
+
+.quarto-grid-item.card:hover .card-img-top img {
+  transform: scale(1.08);
+}
+
+// Category filter pills (Events page sidebar + card badges).
+.quarto-listing-category .category {
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.quarto-listing-category .category:hover {
+  background-color: rgba($midsea-purple, 0.12);
+}
+
+.quarto-listing-category .category.active {
+  background-color: $midsea-purple;
+  color: #ffffff;
+}
+
+.listing-categories .listing-category {
+  background-color: $midsea-purple;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.listing-categories .listing-category:hover {
+  background-color: $midsea-orange;
 }
 
 .page-published {
