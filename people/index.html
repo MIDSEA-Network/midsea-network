@@ -81,7 +81,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-4d1b0b45d0b9d20c6b2f4256a1729a68.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-2a892ad23de13b49eb30e625dfa8f676.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -300,14 +300,24 @@ Note
 }
 .person-card {
   border: 1px solid #e5e0ea;
-  border-radius: 8px;
+  border-radius: 28px 8px 28px 8px;
   overflow: hidden;
   text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+}
+.person-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(122, 44, 191, 0.18);
 }
 .person-card img {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
+  transition: transform 0.5s ease-in-out;
+}
+.person-card:hover img {
+  transform: scale(1.08);
 }
 .person-card-body {
   padding: 0.75rem;
