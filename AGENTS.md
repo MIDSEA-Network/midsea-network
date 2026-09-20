@@ -89,18 +89,37 @@ styles.scss               Brand theme; the whole palette derives from one
 ## Path gotchas (things that will silently break)
 
 - **Use root-relative image paths (`/images/...`), not relative ones**,
-  anywhere an image path is written as a *string* rather than through
-  Quarto's own `image:`/`![]()` handling — e.g. inside `styles.scss`
-  `url(...)`, inside the OJS code in `people/index.qmd`, and in the
-  `photo` column of `people/people.csv`. Because pages live at different
-  folder depths (`index.qmd` at root vs. `people/index.qmd` one level
-  down), a plain relative path resolves differently depending on which
-  page renders it, and breaks the moment content moves. Root-relative
-  paths always work regardless of depth.
+  anywhere an image path is written as a *string* that the **browser**
+  resolves relative to the page's own URL — e.g. inside the OJS code in
+  `people/index.qmd` and in the `photo` column of `people/people.csv`.
+  Because pages live at different folder depths (`index.qmd` at root vs.
+  `people/index.qmd` one level down), a plain relative path resolves
+  differently depending on which page renders it, and breaks the moment
+  content moves. Root-relative paths always work regardless of depth.
+- **`styles.scss` `url(...)` is the opposite case — use a plain relative
+  path (`images/...`), not root-relative.** Quarto compiles `styles.scss`
+  into a bundled CSS file under `_site/site_libs/bootstrap/`, and it *does*
+  scan that SCSS source for `url(...)` references and copies the files
+  they point to into that bundle folder (e.g.
+  `site_libs/bootstrap/images/hero-bg-lines.png`) — but it resolves a
+  relative `url(...)` path against the `.scss` file's own location
+  (`styles.scss` sits at the project root, so `url("images/...")` finds
+  `images/...` there), and it rewrites the compiled CSS's `url(...)` to
+  match the copied file's new location relative to the bundle. That makes
+  the reference work under any deployment base path. A **root-relative**
+  `url("/images/...")` path also gets copied, but the compiled CSS keeps
+  the literal root-relative text unchanged — the browser then resolves it
+  against the *site's* root, which only happens to be right when the site
+  is served from a domain root. It silently 404s once the site is deployed
+  under a subpath (e.g. GitHub Pages project pages at
+  `<user>.github.io/midsea-network/`), even though it renders fine in
+  local preview. Verify any future change here by grepping the compiled
+  `_site/site_libs/bootstrap/*.min.css` for the filename and confirming
+  the referenced path actually exists relative to that CSS file.
 - **Quarto's automatic resource-copying doesn't see every image
-  reference** — it detects `image:` front matter and `![]()` markdown, but
-  not an image path embedded inside SCSS `url()` or inside an OJS/JS
-  string. That's why `_quarto.yml` has:
+  reference** — it detects `image:` front matter, `![]()` markdown, and
+  (per above) `url(...)` inside a `format: html: theme:` SCSS file, but not
+  an image path embedded in an OJS/JS string. That's why `_quarto.yml` has:
   ```yaml
   project:
     resources:
