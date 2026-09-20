@@ -1,0 +1,55 @@
+---
+page-layout: full
+title-block-banner: false
+listing:
+  - id: latest-news
+    contents:
+      - news
+      - "!news/index.qmd"
+    type: grid
+    max-items: 3
+    sort: "date desc"
+    fields: [image, date, title, description]
+    feed: false
+  - id: upcoming-events
+    contents:
+      - events
+      - "!events/index.qmd"
+    type: grid
+    max-items: 3
+    sort: "date desc"
+    fields: [image, event-dates, title, description]
+    field-display-names:
+      event-dates: "Date"
+    feed: false
+---
+
+::: {.hero-banner}
+# A regional network for shared challenges
+
+Infectious diseases cross borders. The expertise needed to understand and
+respond to them must cross borders too.
+
+MIDSEA brings together people from across Southeast Asia to learn from one another, develop locally relevant approaches, and apply infectious disease modelling to the public health priorities of our region.
+:::
+
+## Latest News
+
+:::{#latest-news}
+:::
+
+[See all news &rarr;](news/index.qmd)
+
+## Events
+
+:::{#upcoming-events}
+:::
+
+[See all events &rarr;](events/index.qmd)
+
+## Meet Our Network
+
+Researchers, students, public health professionals, and decision-makers
+from across the region working on infectious disease modelling.
+
+[Browse the People directory &rarr;](people/index.qmd)

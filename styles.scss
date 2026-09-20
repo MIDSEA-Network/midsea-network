@@ -1,0 +1,38 @@
+/*-- scss:defaults --*/
+
+// MIDSEA Network brand colour (purple). Change this one line to re-theme
+// the whole site.
+$midsea-purple: #5b2a86;
+
+$primary: $midsea-purple;
+$link-color: $midsea-purple;
+$navbar-bg: $midsea-purple;
+$navbar-fg: #ffffff;
+$navbar-hl: #f3d9ff;
+$footer-bg: #f7f5fa;
+
+/*-- scss:rules --*/
+
+.navbar-title {
+  font-weight: 700;
+}
+
+.hero-banner {
+  background-color: $midsea-purple;
+  background-image: url("/images/hero-bg-lines.png");
+  background-size: cover;
+  background-position: center;
+  color: #ffffff;
+  padding: 3rem 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+
+  h1, p {
+    color: #ffffff;
+  }
+}
+
+.card-img-top {
+  object-fit: cover;
+  height: 180px;
+}

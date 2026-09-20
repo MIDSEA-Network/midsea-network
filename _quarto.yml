@@ -1,0 +1,53 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - "*.qmd"
+    - "!EDITING.md"
+    - "!AGENTS.md"
+  resources:
+    - images
+
+website:
+  title: "MIDSEA Network"
+  description: "Modelling Infectious Diseases in South East Asia"
+  # site-url: "https://midsea.network"
+  favicon: images/logos/favicon.png
+  navbar:
+    logo: images/logos/midsea-logo.png
+    left:
+      - href: index.qmd
+        text: Home
+      - href: news/index.qmd
+        text: News
+      - href: people/index.qmd
+        text: People
+      - href: events/index.qmd
+        text: Events
+      # - href: training/index.qmd
+      #   text: Training
+      - href: contact/index.qmd
+        text: Contact
+    right:
+      - icon: search
+  page-footer:
+    left: "&copy; The MIDSEA Network, National University of Singapore"
+    center:
+      - text: "Contact Us"
+        href: contact/index.qmd
+      # - text: "Legal"
+      #   href: legal/index.qmd
+      # - text: "Branding Guidelines"
+      #   href: branding/index.qmd
+    right:
+      - text: "barathi.vadivelu@nus.edu.sg"
+        href: "mailto:barathi.vadivelu@nus.edu.sg"
+
+format:
+  html:
+    theme:
+      - cosmo
+      - styles.scss
+    toc: false
+    grid:
+      body-width: 1000px
