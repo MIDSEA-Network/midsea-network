@@ -11,6 +11,7 @@ listing:
   fields: [image, event-dates, title, description, location, categories]
   field-display-names:
     event-dates: "Date"
+    location: "Location"
   feed: false
 ---
 
