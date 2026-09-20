@@ -1,0 +1,22 @@
+---
+title: "Events"
+page-layout: full
+title-block-banner: true
+listing:
+  contents: .
+  type: grid
+  sort: "date desc"
+  categories: true
+  filter-ui: true
+  fields: [image, event-dates, title, description, location, categories]
+  field-display-names:
+    event-dates: "Date"
+  feed: false
+---
+
+<!--
+To add an event: copy _templates/event-template.qmd into this events/
+folder, rename it, and fill in the fields (including a "categories" tag so
+it shows up under the right filter). See EDITING.md for the full
+walkthrough.
+-->

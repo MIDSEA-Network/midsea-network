@@ -1,0 +1,15 @@
+---
+title: "Climate and Health Modelling Webinar"
+date: 2026-09-29
+event-dates: "29 September 2026"
+location: "Online"
+image: ../images/events/climate-health-webinar.jpeg
+description: "Join us on Tuesday 29 September for a series of talks on climate and health modelling!"
+categories: [Online Events, Seminars, Upcoming]
+---
+
+Join us on Tuesday 29 September for a series of talks on climate and health
+modelling.
+
+*(Replace this text with the full agenda, speaker list, and a registration
+link.)*
