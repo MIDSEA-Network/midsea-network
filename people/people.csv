@@ -1,2 +1,2 @@
-name,title,institution,photo,profile_url
-Jane Example,Assistant Professor,Example University,/images/people/placeholder-avatar.svg,
+name,title,institution,photo,profile_url,email
+Jane Example,Assistant Professor,Example University,,,jane.example@example.com

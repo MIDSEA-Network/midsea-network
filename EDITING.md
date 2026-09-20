@@ -59,21 +59,27 @@ correctly by date either way).
 
 People are listed in a single spreadsheet-style file, `people/people.csv`,
 with one row per person and columns: `name, title, institution, photo,
-profile_url`.
+profile_url, email`.
 
 - Open `people/people.csv` (works in Excel, Google Sheets, Numbers, or
   GitHub's built-in editor).
-- Add/edit/remove rows. Leave `photo` blank to use a generic placeholder
-  avatar, or add a photo to `images/people/` and reference it starting with
-  a `/`, e.g. `/images/people/jane-example.jpg`. Leave `profile_url` blank
-  if the person doesn't have a profile page.
+- Add/edit/remove rows. Leave `profile_url` blank if the person doesn't have
+  a profile page.
+- Profile picture, in order of preference:
+  - Add a photo to `images/people/` and reference it in `photo` starting
+    with a `/`, e.g. `/images/people/jane-example.jpg`.
+  - Otherwise, leave `photo` blank and fill in `email` — the site will show
+    that person's [Gravatar](https://gravatar.com) (the avatar tied to their
+    email at gravatar.com), if they have one set up.
+  - If both `photo` and `email` are blank, or the email has no Gravatar, a
+    generic placeholder avatar is shown instead.
 - Save as CSV and commit.
 
 **Importing from the Google Form/Sheet:** once that's ready, export the
 Google Sheet as CSV (File → Download → Comma-separated values), rename the
-columns to match `name, title, institution, photo, profile_url` (or edit
-`people/index.qmd` if you'd rather keep the sheet's own column names), and
-replace `people/people.csv` with the export.
+columns to match `name, title, institution, photo, profile_url, email` (or
+edit `people/index.qmd` if you'd rather keep the sheet's own column names),
+and replace `people/people.csv` with the export.
 
 ## Edit Training or Contact page text
 

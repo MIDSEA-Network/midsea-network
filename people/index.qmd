@@ -17,10 +17,30 @@ existing Google Form/Sheet — see `EDITING.md` for how to swap it in.
 //| echo: false
 people = FileAttachment("people.csv").csv({typed: false})
 
+placeholderAvatar = new URL("/images/people/placeholder-avatar.svg", location.origin).href
+
+async function gravatarUrl(email) {
+  const clean = email.trim().toLowerCase();
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(clean));
+  const hash = Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, "0")).join("");
+  // d=<placeholderAvatar> tells Gravatar to serve our own placeholder if the
+  // email has no Gravatar registered, instead of Gravatar's generic icon.
+  return `https://www.gravatar.com/avatar/${hash}?s=200&d=${encodeURIComponent(placeholderAvatar)}`;
+}
+
+async function photoUrl(p) {
+  if (p.photo && p.photo.trim()) return p.photo.trim();
+  if (p.email && p.email.trim()) return gravatarUrl(p.email);
+  return placeholderAvatar;
+}
+
+photoUrls = Promise.all(people.map(photoUrl))
+
 html`<div class="people-grid">
-  ${people.map(p => html`
+  ${people.map((p, i) => html`
     <div class="person-card">
-      <img src="${p.photo && p.photo.trim() ? p.photo : '/images/people/placeholder-avatar.svg'}" alt="${p.name}">
+      <img src="${photoUrls[i]}" alt="${p.name}"
+        onerror="this.onerror=null;this.src='${placeholderAvatar}';">
       <div class="person-card-body">
         <h3>${p.profile_url && p.profile_url.trim()
           ? html`<a href="${p.profile_url}">${p.name}</a>`
