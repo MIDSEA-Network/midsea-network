@@ -1,0 +1,66 @@
+---
+title: "People"
+page-layout: full
+title-block-banner: true
+---
+
+Researchers, students, public health professionals, and decision-makers from
+across the region working on infectious disease modelling.
+
+::: {.callout-note}
+This directory is starting out empty (a `people.csv` placeholder row is
+included so the format is clear). We plan to import the full list from the
+existing Google Form/Sheet — see `EDITING.md` for how to swap it in.
+:::
+
+```{ojs}
+//| echo: false
+people = FileAttachment("people.csv").csv({typed: false})
+
+html`<div class="people-grid">
+  ${people.map(p => html`
+    <div class="person-card">
+      <img src="${p.photo && p.photo.trim() ? p.photo : '/images/people/placeholder-avatar.svg'}" alt="${p.name}">
+      <div class="person-card-body">
+        <h3>${p.profile_url && p.profile_url.trim()
+          ? html`<a href="${p.profile_url}">${p.name}</a>`
+          : p.name}</h3>
+        <p class="person-title">${p.title}</p>
+        <p class="person-institution">${p.institution}</p>
+      </div>
+    </div>
+  `)}
+</div>`
+```
+
+<style>
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.person-card {
+  border: 1px solid #e5e0ea;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+}
+.person-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+.person-card-body {
+  padding: 0.75rem;
+}
+.person-card-body h3 {
+  font-size: 1rem;
+  margin: 0 0 0.25rem 0;
+}
+.person-title, .person-institution {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 0;
+}
+</style>
