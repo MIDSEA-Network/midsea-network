@@ -1,9 +1,16 @@
 [
   {
-    "listing": "/news/index.html",
+    "listing": "/training/index.html",
     "items": [
-      "/news/2025-midsea-summer-school.html",
-      "/news/2024-hiper-symposium.html"
+      "/training/2025-midsea-summer-school.html"
+    ]
+  },
+  {
+    "listing": "/events/index.html",
+    "items": [
+      "/events/2026-climate-health-webinar.html",
+      "/events/2025-midsea-summer-school.html",
+      "/events/2023-koh-samui-workshop.html"
     ]
   },
   {
@@ -17,11 +24,10 @@
     ]
   },
   {
-    "listing": "/events/index.html",
+    "listing": "/news/index.html",
     "items": [
-      "/events/2026-climate-health-webinar.html",
-      "/events/2025-midsea-summer-school.html",
-      "/events/2023-koh-samui-workshop.html"
+      "/news/2025-midsea-summer-school.html",
+      "/news/2024-hiper-symposium.html"
     ]
   }
 ]
