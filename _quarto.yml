@@ -31,7 +31,7 @@ website:
     right:
       - icon: search
   page-footer:
-    left: "&copy; The MIDSEA Network, National University of Singapore"
+    left: "&copy; The MIDSEA Network"
     center:
       - text: "Contact Us"
         href: contact/index.qmd

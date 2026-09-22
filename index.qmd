@@ -32,6 +32,8 @@ date: last-modified
 </style>
 
 ::: {.hero-banner}
+## Modelling Infectious Diseases in South East Asia
+
 # A regional network for shared challenges
 
 Infectious diseases cross borders. The expertise needed to understand and

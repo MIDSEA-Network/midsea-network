@@ -1,14 +1,14 @@
 ---
-title: "MIDSEA Network Workshop"
+title: "MIDSEA Network Ignition Workshop"
 date: 2023-05-08
 event-dates: "8 - 12 May 2023"
 location: "Koh Samui, Thailand"
-image: ../images/events/koh-samui-2023.jpg
+image: ../images/events/2023-koh-samui.jpg
 description: "An early MIDSEA Network gathering bringing together modellers from across the region."
 categories: [Seminars, Past]
 ---
 
-![](../images/events/koh-samui-2023.jpg)
+![](../images/events/2023-koh-samui.jpg)
 
 An early MIDSEA Network gathering in Koh Samui, Thailand, bringing together
 modellers from across the region.

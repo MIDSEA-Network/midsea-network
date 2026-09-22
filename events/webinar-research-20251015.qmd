@@ -1,0 +1,17 @@
+---
+# ── Copy this file into the events/ folder and rename it, e.g. events/2026-01-my-event.qmd ──
+title: "Hybrid Simulation Modelling of Networks of Heterogeneous Care Homes and the Inter-Facility Spread of COVID-19 through Staff Sharing"
+date: 2025-10-15
+# For date ranges, use the start date above and describe the range in
+# event-dates below so it displays nicely, e.g. "22 - 29 June 2026".
+event-dates: "15 October 2025"
+location: "Online"
+image: ../images/events/webinar-research/20251015-trimmed.jpg
+description: "Research Webinar series"
+categories: [Online Events, Seminars, Past]
+# Pick one or more tags from: Online Events, Seminars, Summer School.
+# Also add "Upcoming" or "Past" so the filter chips on the Events page work,
+# e.g. categories: [Seminars, Upcoming]
+---
+
+![](../images/events/webinar-research/20251015.jpg)

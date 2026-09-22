@@ -4,6 +4,6 @@ page-layout: article
 title-block-banner: true
 ---
 
-Legal notices for The MIDSEA Network, National University of Singapore.
+Legal notices for The MIDSEA Network.
 
 *(Replace this text with the actual legal notices from the current site.)*
