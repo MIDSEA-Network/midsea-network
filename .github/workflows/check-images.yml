@@ -1,0 +1,16 @@
+name: Check images
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  image-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify all referenced images exist
+        run: python3 scripts/check_image_links.py

@@ -24,6 +24,9 @@ jobs:
         with:
           version: 1.10.18
 
+      - name: Check image links
+        run: python3 scripts/check_image_links.py
+
       - name: Render and publish
         uses: quarto-dev/quarto-actions/publish@v2
         with:
