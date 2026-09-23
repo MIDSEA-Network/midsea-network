@@ -3,7 +3,7 @@ title: "MIDSEA Summer School 2025"
 date: 2025-06-23
 event-dates: "23 - 29 June 2025"
 location: "Universitas Gadjah Mada, Yogyakarta, Indonesia"
-image: ../images/training/summer-school-2025.jpg
+image: ../images/training/20250623-summer-school.jpg
 description: "Parallel tracks on foundational and advanced infectious disease modelling, hosted by Universitas Gadjah Mada, with networking across Southeast Asia and beyond."
 ---
 
