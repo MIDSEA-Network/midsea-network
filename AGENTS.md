@@ -86,6 +86,25 @@ styles.scss               Brand theme; the whole palette derives from one
   they're one-off content, not a repeating collection, so they
   intentionally don't use the listing pattern.
 
+## Image naming convention
+
+Content images (news / events / training) are named `YYYYMMDD-slug.ext`:
+
+- `YYYYMMDD` is the item's front-matter `date:` (publish date) from the
+  `.qmd` that references it — not the photo capture date. When two posts
+  share one image file (e.g. events and news both point at
+  `events/20250622-summer-school.jpg`), the file is named after the
+  events post's date and lives in `images/events/`.
+- `-slug` is a short descriptive suffix; `-trimmed` is reserved for
+  alternate crops of the same date.
+- Structural images are exempt: `images/logos/`, `images/hero-bg-lines.png`,
+  `images/people/placeholder-avatar.svg`, and the `REPLACE-ME.jpg`
+  placeholders in `_templates/` keep their names.
+- When renaming images, use `git mv` and update both the `image:` front
+  matter and any `![](...)` body references in the `.qmd` files. Known
+  orphans (no referencing `.qmd`): `events/20260915-townhall.jpg`,
+  `news/20260708-gsidd.jpg`.
+
 ## Path gotchas (things that will silently break)
 
 - **Use root-relative image paths (`/images/...`), not relative ones**,
