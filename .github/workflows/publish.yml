@@ -11,7 +11,17 @@ on:
 name: Publish site
 
 jobs:
+  check-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Verify all referenced images exist
+        run: python3 scripts/check_image_links.py
+
   build-deploy:
+    needs: check-images
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -23,9 +33,6 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@8a96df13519ee81fd526f2dfca5962811136661b # v2.2.0
         with:
           version: 1.10.18
-
-      - name: Check image links
-        run: python3 scripts/check_image_links.py
 
       - name: Render and publish
         uses: quarto-dev/quarto-actions/publish@8a96df13519ee81fd526f2dfca5962811136661b # v2.2.0
