@@ -9,8 +9,8 @@ $midsea-text: #1f2933;
 
 $primary: $midsea-purple;
 $link-color: $midsea-purple;
-$navbar-bg: $midsea-purple;
-$navbar-fg: #ffffff;
+$navbar-bg: #ffffff;
+$navbar-fg: $midsea-purple;
 $navbar-hl: $midsea-orange;
 $footer-bg: #f7f5fa;
 $body-color: $midsea-text;
@@ -18,7 +18,7 @@ $body-color: $midsea-text;
 /*-- scss:rules --*/
 
 .navbar-title {
-  font-weight: 700;
+  font-weight: 300;
 }
 
 // Animated underline that grows in from the left on hover/active, echoing
