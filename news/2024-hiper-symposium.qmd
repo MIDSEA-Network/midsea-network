@@ -1,11 +1,11 @@
 ---
 title: "HIPER Symposium 2024"
 date: 2024-09-01
-image: ../images/news/hiper-symposium-2024.jpg
+image: ../images/news/2024-hiper-symposium.jpg
 description: "MIDSEA Network members took part in the HIPER Symposium, sharing work on infectious disease modelling across the region."
 ---
 
-![](../images/news/hiper-symposium-2024.jpg)
+![](../images/news/2024-hiper-symposium.jpg)
 
 MIDSEA Network members took part in the HIPER Symposium 2024, presenting
 recent work and connecting with researchers, students, and public health

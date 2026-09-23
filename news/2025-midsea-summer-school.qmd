@@ -1,11 +1,11 @@
 ---
 title: "MIDSEA Summer School 2025"
 date: 2025-06-29
-image: ../images/news/summer-school-2025.jpg
+image: ../images/events/summer-school-2025.jpg
 description: "A week of hands-on infectious disease modelling training in Yogyakarta, Indonesia, following on from 2024's event in Vietnam."
 ---
 
-![](../images/news/summer-school-2025.jpg)
+![](../images/events/summer-school-2025.jpg)
 
 The MIDSEA Summer School returned in 2025, hosted by Universitas Gadjah Mada
 in Yogyakarta, Indonesia, from 23-29 June. Building on the success of the
