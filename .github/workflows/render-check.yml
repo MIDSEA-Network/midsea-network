@@ -2,11 +2,6 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     branches: [main]
-    paths-ignore:
-      - AGENTS.md
-      - EDITING.md
-      - README.md
-      - .gitignore
   workflow_dispatch: {}
 
 name: Render check
