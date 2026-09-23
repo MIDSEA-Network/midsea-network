@@ -1,0 +1,41 @@
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main]
+    paths-ignore:
+      - AGENTS.md
+      - EDITING.md
+      - README.md
+      - .gitignore
+  workflow_dispatch: {}
+
+name: Render check
+
+concurrency:
+  group: render-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
+    permissions:
+      contents: read
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.10.18
+
+      - name: Render site
+        uses: quarto-dev/quarto-actions/render@v2
+
+      - name: Upload rendered site
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-preview
+          path: _site
+          retention-days: 7
