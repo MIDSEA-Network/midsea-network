@@ -180,7 +180,12 @@ Content images (news / events / training) are named `YYYYMMDD-slug.ext`:
   Because pages live at different folder depths (`index.qmd` at root vs.
   `people/index.qmd` one level down), a plain relative path resolves
   differently depending on which page renders it, and breaks the moment
-  content moves. Root-relative paths always work regardless of depth.
+  content moves. But the browser must never resolve these strings
+  directly: the site is deployed under a subpath
+  (`midsea-network.github.io/midsea-network/`), so a raw `/images/...`
+  hits the domain root and 404s. `people/index.qmd` passes every path
+  through its `siteUrl()` helper, which resolves it against the site root.
+  Any new JS that builds an image URL must do the same.
 - **`styles.scss` `url(...)` is the opposite case — use a plain relative
   path (`images/...`), not root-relative.** Quarto compiles `styles.scss`
   into a bundled CSS file under `_site/site_libs/bootstrap/`, and it *does*

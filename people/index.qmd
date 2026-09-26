@@ -13,18 +13,29 @@ across the region working on infectious disease modelling.
 //| echo: false
 people = FileAttachment("people.csv").csv({typed: false})
 
-placeholderAvatar = new URL("/images/people/placeholder-avatar.svg", location.origin).href
+// The site can be served under a subpath (GitHub Pages project page:
+// <org>.github.io/midsea-network/), so a "/images/..." path must resolve
+// against the site root, not the domain root. This page is one folder deep.
+siteRoot = new URL("../", location.href).href
+
+function siteUrl(path) {
+  // Full URLs (https://...) pass through new URL() unchanged.
+  return new URL(path.replace(/^\/(?!\/)/, ""), siteRoot).href;
+}
+
+placeholderAvatar = siteUrl("images/people/placeholder-avatar.svg")
 
 // people.csv stores the SHA-256 of the lower-cased email, never the email
 // itself: the CSV is published with the site. Gravatar looks up by that hash.
 function gravatarUrl(hash) {
-  // d=<placeholderAvatar> tells Gravatar to serve our own placeholder if the
-  // email has no Gravatar registered, instead of Gravatar's generic icon.
-  return `https://www.gravatar.com/avatar/${hash}?s=200&d=${encodeURIComponent(placeholderAvatar)}`;
+  // d=404 makes Gravatar return 404 when the email has no Gravatar, so the
+  // <img> onerror swaps in our placeholder. Gravatar cannot use our SVG as
+  // its d= default: it only accepts public .jpg/.gif/.png URLs.
+  return `https://www.gravatar.com/avatar/${hash}?s=200&d=404`;
 }
 
 function photoUrl(p) {
-  if (p.photo && p.photo.trim()) return p.photo.trim();
+  if (p.photo && p.photo.trim()) return siteUrl(p.photo.trim());
   if (p.email_sha256 && p.email_sha256.trim()) return gravatarUrl(p.email_sha256.trim());
   return placeholderAvatar;
 }
