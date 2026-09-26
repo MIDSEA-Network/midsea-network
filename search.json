@@ -14,53 +14,18 @@
     "text": "Researchers, students, public health professionals, and decision-makers from across the region working on infectious disease modelling.\nApply to join MIDSEA!\n\npeople = FileAttachment(\"people.csv\").csv({typed: false})\n\nplaceholderAvatar = new URL(\"/images/people/placeholder-avatar.svg\", location.origin).href\n\n// people.csv stores the SHA-256 of the lower-cased email, never the email\n// itself: the CSV is published with the site. Gravatar looks up by that hash.\nfunction gravatarUrl(hash) {\n  // d=&lt;placeholderAvatar&gt; tells Gravatar to serve our own placeholder if the\n  // email has no Gravatar registered, instead of Gravatar's generic icon.\n  return `https://www.gravatar.com/avatar/${hash}?s=200&d=${encodeURIComponent(placeholderAvatar)}`;\n}\n\nfunction photoUrl(p) {\n  if (p.photo && p.photo.trim()) return p.photo.trim();\n  if (p.email_sha256 && p.email_sha256.trim()) return gravatarUrl(p.email_sha256.trim());\n  return placeholderAvatar;\n}\n\nphotoUrls = people.map(photoUrl)\n\nhtml`&lt;div class=\"people-grid\"&gt;\n  ${people.map((p, i) =&gt; html`\n    &lt;div class=\"person-card\"&gt;\n      &lt;img src=\"${photoUrls[i]}\" alt=\"${p.name}\"\n        onerror=\"this.onerror=null;this.src='${placeholderAvatar}';\"&gt;\n      &lt;div class=\"person-card-body\"&gt;\n        &lt;h3&gt;${p.profile_url && p.profile_url.trim()\n          ? html`&lt;a href=\"${p.profile_url}\"&gt;${p.name}&lt;/a&gt;`\n          : p.name}&lt;/h3&gt;\n        &lt;p class=\"person-title\"&gt;${p.title}&lt;/p&gt;\n        &lt;p class=\"person-institution\"&gt;${p.institution}&lt;/p&gt;\n      &lt;/div&gt;\n    &lt;/div&gt;\n  `)}\n&lt;/div&gt;`"
   },
   {
-    "objectID": "news/2025-midsea-summer-school.html",
-    "href": "news/2025-midsea-summer-school.html",
-    "title": "MIDSEA Summer School 2025",
+    "objectID": "news/index.html",
+    "href": "news/index.html",
+    "title": "News",
     "section": "",
-    "text": "The MIDSEA Summer School returned in 2025, hosted by Universitas Gadjah Mada in Yogyakarta, Indonesia, from 23-29 June. Building on the success of the 2024 edition in Vietnam, this year’s programme offered parallel tracks covering both foundational and advanced disease modelling concepts, plus plenty of opportunities to network with modellers from across Southeast Asia and beyond.\n(Replace this text and photo with your own recap, highlights, and links to photos or recordings.)"
+    "text": "MIDSEA Summer School 2025\n\n\nA week of hands-on infectious disease modelling training in Yogyakarta, Indonesia, following on from 2024’s event in Vietnam.\n\n\n\n29 June 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nHIPER Symposium 2024\n\n\nMIDSEA Network members took part in the HIPER Symposium, sharing work on infectious disease modelling across the region.\n\n\n\n1 September 2024\n\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "legal/index.html",
-    "href": "legal/index.html",
-    "title": "Legal",
+    "objectID": "news/2024-hiper-symposium.html",
+    "href": "news/2024-hiper-symposium.html",
+    "title": "HIPER Symposium 2024",
     "section": "",
-    "text": "Legal notices for The MIDSEA Network.\n(Replace this text with the actual legal notices from the current site.)"
-  },
-  {
-    "objectID": "events/index.html",
-    "href": "events/index.html",
-    "title": "Events",
-    "section": "",
-    "text": "Climate and Health Modelling Webinar\n\n\n\nOnline Events\n\nSeminars\n\nUpcoming\n\n\n\nJoin us on Tuesday 29 September for a series of talks on climate and health modelling!\n\n\n\n\n\nDate\n\n\n29 September 2026\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPredicting Tomorrow’s Outbreaks Today: AI for Zoonotic Risk\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n15 April 2026\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFrom Models to Tools: Research Software Engineering for Infectious Disease Research at MORU\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n19 February 2026\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHybrid Simulation Modelling of Networks of Heterogeneous Care Homes and the Inter-Facility Spread of COVID-19 through Staff Sharing\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n15 October 2025\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFrom Raw Fish Consumption to Cancer – Uncovering the Natural History of Liver Fluke Infection\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n17 September 2025\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nModelling Infectious Diseases in a Changing Climate\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n13 August 2025\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMIDSEA Summer School 2025\n\n\n\nSummer School\n\nPast\n\n\n\nA week of parallel tracks on foundational and advanced infectious disease modelling, plus networking across Southeast Asia and beyond.\n\n\n\n\n\nDate\n\n\n22 - 29 June 2025\n\n\n\n\n\nLocation\n\n\nUniversitas Gadjah Mada, Yogyakarta, Indonesia\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nUnderstanding the Prevalence and Potential for Transmission of Healthcare-Associated Infections in Victoria, Australia\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n18 June 2025\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNovel Approaches to Strengthening Analytics & Modelling Capacity\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n14 May 2025\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPredictive Analytics and Bioinformatics: A New Frontier in Rabies Prevention in Davao City\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n14 August 2024\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMIDSEA Network Ignition Workshop\n\n\n\nSeminars\n\nPast\n\n\n\nAn early MIDSEA Network gathering bringing together modellers from across the region.\n\n\n\n\n\nDate\n\n\n8 - 12 May 2023\n\n\n\n\n\nLocation\n\n\nKoh Samui, Thailand\n\n\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "events/2025-midsea-summer-school.html",
-    "href": "events/2025-midsea-summer-school.html",
-    "title": "MIDSEA Summer School 2025",
-    "section": "",
-    "text": "A week of parallel tracks on foundational and advanced infectious disease modelling, hosted by Universitas Gadjah Mada, with networking opportunities across Southeast Asia and beyond.\n(Replace this text with a recap, photos, and links to materials.)"
-  },
-  {
-    "objectID": "contact/index.html",
-    "href": "contact/index.html",
-    "title": "Contact",
-    "section": "",
-    "text": "If you are interested in joining, working, or funding with us, please get in touch.\nEmail: barathi.vadivelu@nus.edu.sg\nPhone: +65 6601 2408"
-  },
-  {
-    "objectID": "events/2023-koh-samui-workshop.html",
-    "href": "events/2023-koh-samui-workshop.html",
-    "title": "MIDSEA Network Ignition Workshop",
-    "section": "",
-    "text": "An early MIDSEA Network gathering in Koh Samui, Thailand, bringing together modellers from across the region.\n(Replace this text with a recap, photos, and links to materials.)"
-  },
-  {
-    "objectID": "events/2026-climate-health-webinar.html",
-    "href": "events/2026-climate-health-webinar.html",
-    "title": "Climate and Health Modelling Webinar",
-    "section": "",
-    "text": "Join us on Tuesday 29 September for a series of talks on climate and health modelling.\n(Replace this text with the full agenda, speaker list, and a registration link.)"
+    "text": "MIDSEA Network members took part in the HIPER Symposium 2024, presenting recent work and connecting with researchers, students, and public health professionals from across the region.\n(Replace this text and photo with your own recap, highlights, and links to photos or recordings.)"
   },
   {
     "objectID": "index.html#modelling-infectious-diseases-in-south-east-asia",
@@ -91,18 +56,60 @@
     "text": "Meet Our Network\nResearchers, students, public health professionals, and decision-makers from across the region working on infectious disease modelling.\nBrowse the People directory →\n\nLast rendered: 2026-09-26"
   },
   {
-    "objectID": "news/2024-hiper-symposium.html",
-    "href": "news/2024-hiper-symposium.html",
-    "title": "HIPER Symposium 2024",
+    "objectID": "events/2026-climate-health-webinar.html",
+    "href": "events/2026-climate-health-webinar.html",
+    "title": "Climate and Health Modelling Webinar",
     "section": "",
-    "text": "MIDSEA Network members took part in the HIPER Symposium 2024, presenting recent work and connecting with researchers, students, and public health professionals from across the region.\n(Replace this text and photo with your own recap, highlights, and links to photos or recordings.)"
+    "text": "Join us on Tuesday 29 September for a series of talks on climate and health modelling.\n(Replace this text with the full agenda, speaker list, and a registration link.)"
   },
   {
-    "objectID": "news/index.html",
-    "href": "news/index.html",
-    "title": "News",
+    "objectID": "events/2023-koh-samui-workshop.html",
+    "href": "events/2023-koh-samui-workshop.html",
+    "title": "MIDSEA Network Ignition Workshop",
     "section": "",
-    "text": "MIDSEA Summer School 2025\n\n\nA week of hands-on infectious disease modelling training in Yogyakarta, Indonesia, following on from 2024’s event in Vietnam.\n\n\n\n29 June 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nHIPER Symposium 2024\n\n\nMIDSEA Network members took part in the HIPER Symposium, sharing work on infectious disease modelling across the region.\n\n\n\n1 September 2024\n\n\n\n\n\n\nNo matching items"
+    "text": "An early MIDSEA Network gathering in Koh Samui, Thailand, bringing together modellers from across the region.\n(Replace this text with a recap, photos, and links to materials.)"
+  },
+  {
+    "objectID": "contact/index.html",
+    "href": "contact/index.html",
+    "title": "Contact",
+    "section": "",
+    "text": "If you are interested in joining, working, or funding with us, please get in touch.\nEmail: barathi.vadivelu@nus.edu.sg\nPhone: +65 6601 2408"
+  },
+  {
+    "objectID": "events/2025-midsea-summer-school.html",
+    "href": "events/2025-midsea-summer-school.html",
+    "title": "MIDSEA Summer School 2025",
+    "section": "",
+    "text": "A week of parallel tracks on foundational and advanced infectious disease modelling, hosted by Universitas Gadjah Mada, with networking opportunities across Southeast Asia and beyond.\n(Replace this text with a recap, photos, and links to materials.)"
+  },
+  {
+    "objectID": "events/index.html",
+    "href": "events/index.html",
+    "title": "Events",
+    "section": "",
+    "text": "Climate and Health Modelling Webinar\n\n\n\nOnline Events\n\nSeminars\n\nUpcoming\n\n\n\nJoin us on Tuesday 29 September for a series of talks on climate and health modelling!\n\n\n\n\n\nDate\n\n\n29 September 2026\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPredicting Tomorrow’s Outbreaks Today: AI for Zoonotic Risk\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n15 April 2026\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFrom Models to Tools: Research Software Engineering for Infectious Disease Research at MORU\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n19 February 2026\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHybrid Simulation Modelling of Networks of Heterogeneous Care Homes and the Inter-Facility Spread of COVID-19 through Staff Sharing\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n15 October 2025\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFrom Raw Fish Consumption to Cancer – Uncovering the Natural History of Liver Fluke Infection\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n17 September 2025\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nModelling Infectious Diseases in a Changing Climate\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n13 August 2025\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMIDSEA Summer School 2025\n\n\n\nSummer School\n\nPast\n\n\n\nA week of parallel tracks on foundational and advanced infectious disease modelling, plus networking across Southeast Asia and beyond.\n\n\n\n\n\nDate\n\n\n22 - 29 June 2025\n\n\n\n\n\nLocation\n\n\nUniversitas Gadjah Mada, Yogyakarta, Indonesia\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nUnderstanding the Prevalence and Potential for Transmission of Healthcare-Associated Infections in Victoria, Australia\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n18 June 2025\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNovel Approaches to Strengthening Analytics & Modelling Capacity\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n14 May 2025\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPredictive Analytics and Bioinformatics: A New Frontier in Rabies Prevention in Davao City\n\n\n\nOnline Events\n\nSeminars\n\nPast\n\n\n\nResearch Webinar series\n\n\n\n\n\nDate\n\n\n14 August 2024\n\n\n\n\n\nLocation\n\n\nOnline\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMIDSEA Network Ignition Workshop\n\n\n\nSeminars\n\nPast\n\n\n\nAn early MIDSEA Network gathering bringing together modellers from across the region.\n\n\n\n\n\nDate\n\n\n8 - 12 May 2023\n\n\n\n\n\nLocation\n\n\nKoh Samui, Thailand\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "legal/index.html",
+    "href": "legal/index.html",
+    "title": "Legal",
+    "section": "",
+    "text": "Legal notices for The MIDSEA Network.\n(Replace this text with the actual legal notices from the current site.)"
+  },
+  {
+    "objectID": "news/2025-midsea-summer-school.html",
+    "href": "news/2025-midsea-summer-school.html",
+    "title": "MIDSEA Summer School 2025",
+    "section": "",
+    "text": "The MIDSEA Summer School returned in 2025, hosted by Universitas Gadjah Mada in Yogyakarta, Indonesia, from 23-29 June. Building on the success of the 2024 edition in Vietnam, this year’s programme offered parallel tracks covering both foundational and advanced disease modelling concepts, plus plenty of opportunities to network with modellers from across Southeast Asia and beyond.\n(Replace this text and photo with your own recap, highlights, and links to photos or recordings.)"
+  },
+  {
+    "objectID": "people/apply.html",
+    "href": "people/apply.html",
+    "title": "Join the People directory",
+    "section": "",
+    "text": "Fill in this application form to appear on the People page. A MIDSEA maintainer will review your application before it goes live. To change your details later, submit the form again with the same email address.\n\n\n  \n    Full name *\n    \n  \n  \n    Email *\n    \n    Not shown on the website. We use it to contact you and to find your\n      Gravatar if you do not upload a photo.\n  \n  \n    Job title\n    \n  \n  \n    Institution\n    \n  \n  \n    Profile page link\n    \n  \n  \n    Profile photo\n    \n    JPEG, PNG, or WebP. A square photo looks best.\n  \n  \n  \n    Website\n    \n  \n  \n    \n    I agree that my name, job title,\n      institution, profile link, and photo appear on the public People page. *\n  \n  Submit application"
   },
   {
     "objectID": "training/2025-midsea-summer-school.html",
