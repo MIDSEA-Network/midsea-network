@@ -7,11 +7,7 @@ title-block-banner: true
 Researchers, students, public health professionals, and decision-makers from
 across the region working on infectious disease modelling.
 
-::: {.callout-note}
-This directory is starting out empty (a `people.csv` placeholder row is
-included so the format is clear). We plan to import the full list from the
-existing Google Form/Sheet — see `EDITING.md` for how to swap it in.
-:::
+[Apply to join MIDSEA!](apply.qmd){.btn .btn-primary}
 
 ```{ojs}
 //| echo: false
@@ -19,22 +15,21 @@ people = FileAttachment("people.csv").csv({typed: false})
 
 placeholderAvatar = new URL("/images/people/placeholder-avatar.svg", location.origin).href
 
-async function gravatarUrl(email) {
-  const clean = email.trim().toLowerCase();
-  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(clean));
-  const hash = Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, "0")).join("");
+// people.csv stores the SHA-256 of the lower-cased email, never the email
+// itself: the CSV is published with the site. Gravatar looks up by that hash.
+function gravatarUrl(hash) {
   // d=<placeholderAvatar> tells Gravatar to serve our own placeholder if the
   // email has no Gravatar registered, instead of Gravatar's generic icon.
   return `https://www.gravatar.com/avatar/${hash}?s=200&d=${encodeURIComponent(placeholderAvatar)}`;
 }
 
-async function photoUrl(p) {
+function photoUrl(p) {
   if (p.photo && p.photo.trim()) return p.photo.trim();
-  if (p.email && p.email.trim()) return gravatarUrl(p.email);
+  if (p.email_sha256 && p.email_sha256.trim()) return gravatarUrl(p.email_sha256.trim());
   return placeholderAvatar;
 }
 
-photoUrls = Promise.all(people.map(photoUrl))
+photoUrls = people.map(photoUrl)
 
 html`<div class="people-grid">
   ${people.map((p, i) => html`
@@ -52,45 +47,3 @@ html`<div class="people-grid">
   `)}
 </div>`
 ```
-
-<style>
-.people-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-.person-card {
-  border: 1px solid #e5e0ea;
-  border-radius: 28px 8px 28px 8px;
-  overflow: hidden;
-  text-align: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
-}
-.person-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(122, 44, 191, 0.18);
-}
-.person-card img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  transition: transform 0.5s ease-in-out;
-}
-.person-card:hover img {
-  transform: scale(1.08);
-}
-.person-card-body {
-  padding: 0.75rem;
-}
-.person-card-body h3 {
-  font-size: 1rem;
-  margin: 0 0 0.25rem 0;
-}
-.person-title, .person-institution {
-  font-size: 0.85rem;
-  color: #555;
-  margin: 0;
-}
-</style>

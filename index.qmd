@@ -1,6 +1,9 @@
 ---
 page-layout: full
 title-block-banner: false
+# No title block. The render date sits in date-modified, not date, because
+# Pandoc's fallback header still prints `date` even with the block off.
+title-block-style: none
 listing:
   - id: latest-news
     contents:
@@ -22,14 +25,8 @@ listing:
     field-display-names:
       event-dates: "Date"
     feed: false
-date: last-modified
+date-modified: last-modified
 ---
-
-<style>
-/* The date front-matter is only used to power the "Published" line in the
-   page footer below; hide Quarto's default title-block rendering of it. */
-#title-block-header { display: none; }
-</style>
 
 ::: {.hero-banner}
 ## Modelling Infectious Diseases in South East Asia
@@ -64,5 +61,5 @@ from across the region working on infectious disease modelling.
 [Browse the People directory &rarr;](people/index.qmd)
 
 ::: {.page-published}
-Last rendered: {{< meta date >}}
+Last rendered: {{< meta date-modified >}}
 :::
