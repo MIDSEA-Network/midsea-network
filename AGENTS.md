@@ -57,7 +57,7 @@ styles.scss               Brand theme; the whole palette derives from one
                           Renders and publishes to the gh-pages branch on
                           every push to main
 .github/workflows/add-person.yml
-                          Approved application -> people.csv (see below)
+                          Approved application -> PR -> merge (see below)
 scripts/add_person.py     Upserts one people.csv row + photo from the
                           add-person repository_dispatch payload
 scripts/apps-script/Code.gs
@@ -74,14 +74,22 @@ scripts/apps-script/Code.gs
 2. A maintainer sets Status to `Approved`. The installable `onStatusEdit`
    trigger sends a `repository_dispatch` event `add-person`, then writes
    `Sent to GitHub` (or the error in `Note`) on the row.
-3. `add-person.yml` runs `add_person.py`, commits `people.csv` +
-   `images/people/<slug>.<ext>`, checks images and runs a full
-   `quarto render`, then rebases onto `main`, pushes, and starts
-   `publish.yml` with `gh workflow run` — a push made with `GITHUB_TOKEN`
-   does not trigger other workflows, so the push trigger never fires.
+3. `add-person.yml` runs `add_person.py` and the image check, commits
+   `people.csv` + `images/people/<slug>.<ext>` on a branch, and opens a
+   PR. `render-check.yml` runs on it (the `render` check that the
+   `protect-main` ruleset requires). The workflow waits for that check to
+   pass, then merges; the merge starts `publish.yml`. A failed check leaves
+   the PR open for a maintainer.
 
+- The workflow uses the `PEOPLE_BOT_TOKEN` secret (fine-grained PAT, this
+  repo only, Contents + Pull requests read/write), not `GITHUB_TOKEN`:
+  `GITHUB_TOKEN` cannot bypass `protect-main`, the org does not let it
+  open PRs, and its pushes/PRs would not start `render-check.yml` or
+  `publish.yml`. When the PAT expires, the pipeline stops — renew it.
+- The PAT owner may be a ruleset bypass actor, so the merge alone would
+  not wait for `render`. Keep the explicit "Wait for render check" step.
 - Approval lives in the Sheet: anyone with edit access to it can publish a
-  person. The workflow has no environment gate.
+  person. The workflow has no environment gate or PR review.
 - The photo travels inside the dispatch payload, which GitHub caps at
   64 KB. Apps Script cannot resize images, so the browser resizes the
   photo to a JPEG of at most `MAX_PHOTO_B64` base64 characters before

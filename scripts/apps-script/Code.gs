@@ -7,9 +7,9 @@
  *      and saves the photo (already resized by the browser) to Drive.
  *   2. A maintainer sets Status to "Approved" in the Sheet. onStatusEdit()
  *      sends a `repository_dispatch` event ("add-person") to GitHub.
- *   3. .github/workflows/add-person.yml writes the row to people/people.csv,
- *      commits the photo, renders the site to check it, pushes, and
- *      republishes.
+ *   3. .github/workflows/add-person.yml writes the row to people/people.csv
+ *      and the photo, opens a PR, waits for the render check, and merges.
+ *      The merge republishes the site.
  *
  * Anyone with edit access to the Sheet can approve, so share it only with
  * maintainers.

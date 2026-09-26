@@ -9,32 +9,47 @@ concurrency:
   group: people-csv
   cancel-in-progress: false
 
+# The protect-main ruleset requires a PR with a passing `render` check, and
+# GITHUB_TOKEN may neither bypass it nor open PRs. So every git/gh call here
+# uses PEOPLE_BOT_TOKEN (fine-grained PAT: this repo, Contents + Pull
+# requests read/write). Its events also start other workflows, so the PR
+# runs render-check.yml and the merge runs publish.yml.
+#
+# Approval happens in the applications Google Sheet: the Apps Script only
+# dispatches rows a maintainer set to "Approved".
+
+permissions:
+  contents: read
+
 jobs:
   add-person:
     runs-on: ubuntu-latest
-    # Approval happens in the applications Google Sheet: the Apps Script
-    # only dispatches rows a maintainer set to "Approved".
-    permissions:
-      contents: write
-      actions: write
+    env:
+      GH_TOKEN: ${{ secrets.PEOPLE_BOT_TOKEN }}
+      BRANCH: add-person/${{ github.run_id }}
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
+          token: ${{ secrets.PEOPLE_BOT_TOKEN }}
 
       - name: Add person to people.csv
         id: add
         run: python3 scripts/add_person.py
 
-      - name: Commit
-        id: commit
+      - name: Verify all referenced images exist
+        run: python3 scripts/check_image_links.py
+
+      - name: Commit and open PR
+        id: pr
         env:
           PERSON_NAME: ${{ steps.add.outputs.name }}
           ACTION: ${{ steps.add.outputs.action }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$BRANCH"
           git add people/people.csv images/people
           if git diff --cached --quiet; then
             echo "No change to commit."
@@ -42,34 +57,34 @@ jobs:
             exit 0
           fi
           git commit -m "People: $ACTION $PERSON_NAME from approved application"
+          git push origin "$BRANCH"
+          gh pr create --base main --head "$BRANCH" \
+            --title "People: $ACTION $PERSON_NAME" \
+            --body "Approved in the member applications Sheet. Merged by the add-person workflow once the render check passes."
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
-      # Checks: nothing reaches main unless the site still builds.
-      - name: Verify all referenced images exist
-        if: steps.commit.outputs.changed == 'true'
-        run: python3 scripts/check_image_links.py
-
-      - name: Set up Quarto
-        if: steps.commit.outputs.changed == 'true'
-        uses: quarto-dev/quarto-actions/setup@8a96df13519ee81fd526f2dfca5962811136661b # v2.2.0
-        with:
-          version: 1.10.18
-
-      - name: Render site
-        if: steps.commit.outputs.changed == 'true'
-        uses: quarto-dev/quarto-actions/render@8a96df13519ee81fd526f2dfca5962811136661b # v2.2.0
-
-      - name: Push
-        if: steps.commit.outputs.changed == 'true'
-        run: |
-          # main can move while the render runs; replay this commit on top.
-          git pull --rebase origin main
-          git push origin HEAD:main
-
-      # A push made with GITHUB_TOKEN does not start other workflows, so
-      # publish.yml's push trigger never fires. workflow_dispatch is exempt.
-      - name: Trigger publish
-        if: steps.commit.outputs.changed == 'true'
+      # The PAT owner may be a ruleset bypass actor, whose merge would not
+      # wait for the check, so wait here explicitly.
+      - name: Wait for render check
+        if: steps.pr.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh workflow run publish.yml --ref main
+          SHA: ${{ steps.pr.outputs.sha }}
+        run: |
+          for _ in $(seq 120); do
+            result=$(gh api "repos/$GITHUB_REPOSITORY/commits/$SHA/check-runs?check_name=render" \
+              --jq '.check_runs[0] | "\(.status) \(.conclusion)"')
+            case "$result" in
+              "completed success") echo "Render check passed."; exit 0 ;;
+              completed*) echo "::error::Render check failed ($result). PR left open for a maintainer."; exit 1 ;;
+            esac
+            sleep 10
+          done
+          echo "::error::Render check did not finish in 20 minutes. PR left open."
+          exit 1
+
+      - name: Merge PR
+        if: steps.pr.outputs.changed == 'true'
+        run: |
+          gh pr merge "$BRANCH" --merge
+          git push origin --delete "$BRANCH"
