@@ -1,3 +1,3 @@
-name,title,institution,photo,profile_url,email
-Jane Example,Assistant Professor,Example University,,,jane.example@example.com
-Super Mario Bros,Inspirer,Nintendo,,,everything@good.jp
+name,title,institution,photo,profile_url,email_sha256
+Jane Example,Assistant Professor,Example University,,,1c90ae9cfca4c334a43cef3e50a1d53c54b482342d82a6fdc8c6c3fe4285c4eb
+Super Mario Bros,Inspirer,Nintendo,,,e8e2ffb276e3d5872b55c0a6261de1ee0b1c1b4b2fa97b5f4f4e6db36b048f39
