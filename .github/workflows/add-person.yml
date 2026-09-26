@@ -1,0 +1,75 @@
+on:
+  repository_dispatch:
+    types: [add-person]
+
+name: Add approved member to People
+
+# Two approvals close together must not race on people.csv.
+concurrency:
+  group: people-csv
+  cancel-in-progress: false
+
+jobs:
+  add-person:
+    runs-on: ubuntu-latest
+    # Approval happens in the applications Google Sheet: the Apps Script
+    # only dispatches rows a maintainer set to "Approved".
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+
+      - name: Add person to people.csv
+        id: add
+        run: python3 scripts/add_person.py
+
+      - name: Commit
+        id: commit
+        env:
+          PERSON_NAME: ${{ steps.add.outputs.name }}
+          ACTION: ${{ steps.add.outputs.action }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add people/people.csv images/people
+          if git diff --cached --quiet; then
+            echo "No change to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "People: $ACTION $PERSON_NAME from approved application"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # Checks: nothing reaches main unless the site still builds.
+      - name: Verify all referenced images exist
+        if: steps.commit.outputs.changed == 'true'
+        run: python3 scripts/check_image_links.py
+
+      - name: Set up Quarto
+        if: steps.commit.outputs.changed == 'true'
+        uses: quarto-dev/quarto-actions/setup@8a96df13519ee81fd526f2dfca5962811136661b # v2.2.0
+        with:
+          version: 1.10.18
+
+      - name: Render site
+        if: steps.commit.outputs.changed == 'true'
+        uses: quarto-dev/quarto-actions/render@8a96df13519ee81fd526f2dfca5962811136661b # v2.2.0
+
+      - name: Push
+        if: steps.commit.outputs.changed == 'true'
+        run: |
+          # main can move while the render runs; replay this commit on top.
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      # A push made with GITHUB_TOKEN does not start other workflows, so
+      # publish.yml's push trigger never fires. workflow_dispatch is exempt.
+      - name: Trigger publish
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run publish.yml --ref main

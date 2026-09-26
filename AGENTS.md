@@ -30,7 +30,9 @@ events/*.qmd              One file per event (front matter: title, date,
 people/index.qmd        People directory — renders people/people.csv as
                           cards via an OJS (Observable JS) code block
 people/people.csv        One row per person: name, title, institution,
-                          photo, profile_url
+                          photo, profile_url, email_sha256
+people/apply.qmd         Member application form; POSTs to the Apps Script
+                          web app (see "Member application pipeline")
 contact/index.qmd       Static
 training/index.qmd      Training listing page (Quarto `listing`, currently
                           commented out of the navbar — see _quarto.yml)
@@ -54,7 +56,57 @@ styles.scss               Brand theme; the whole palette derives from one
 .github/workflows/publish.yml
                           Renders and publishes to the gh-pages branch on
                           every push to main
+.github/workflows/add-person.yml
+                          Approved application -> people.csv (see below)
+scripts/add_person.py     Upserts one people.csv row + photo from the
+                          add-person repository_dispatch payload
+scripts/apps-script/Code.gs
+                          Apps Script bound to the applications Google
+                          Sheet; not run from the repo, kept here for
+                          version control
 ```
+
+## Member application pipeline
+
+1. `people/apply.qmd` POSTs each application to the `Code.gs` web app
+   (`data-endpoint` on the form). `doPost()` appends a `Pending` row to the
+   `Applications` tab and saves the photo to a Drive folder.
+2. A maintainer sets Status to `Approved`. The installable `onStatusEdit`
+   trigger sends a `repository_dispatch` event `add-person`, then writes
+   `Sent to GitHub` (or the error in `Note`) on the row.
+3. `add-person.yml` runs `add_person.py`, commits `people.csv` +
+   `images/people/<slug>.<ext>`, checks images and runs a full
+   `quarto render`, then rebases onto `main`, pushes, and starts
+   `publish.yml` with `gh workflow run` — a push made with `GITHUB_TOKEN`
+   does not trigger other workflows, so the push trigger never fires.
+
+- Approval lives in the Sheet: anyone with edit access to it can publish a
+  person. The workflow has no environment gate.
+- The photo travels inside the dispatch payload, which GitHub caps at
+  64 KB. Apps Script cannot resize images, so the browser resizes the
+  photo to a JPEG of at most `MAX_PHOTO_B64` base64 characters before
+  sending. `Code.gs` rejects anything over `CONFIG.maxPhotoB64` or not a
+  JPEG. Keep the two limits in step.
+- The form POSTs without a `Content-Type` header on purpose: a
+  `text/plain` request skips the CORS preflight, which Apps Script web
+  apps do not answer. Do not add `application/json`.
+- The Sheet holds plain emails; it is private. `people.csv` is published
+  with the site, so it holds `email_sha256` (SHA-256 of the trimmed,
+  lower-cased email), never a plain email. `Code.gs` hashes it before
+  sending, so plain emails never reach GitHub. Gravatar looks up avatars by
+  this same hash. Do not add a plain `email` column back.
+- Rows match on `email_sha256` (else name), so a second application with
+  the same email updates the row in place.
+- `Code.gs` prefixes public input that starts with `= + - @` with `'` so
+  it cannot run as a Sheet formula. A hidden `website` honeypot field
+  drops simple bot posts.
+- The Sheet's `MIDSEA` menu has "Send approved rows not yet sent" (retry
+  and bulk path) and "Resend selected rows" (after fixing a typo in the
+  Sheet).
+- After editing `Code.gs`, redeploy the web app as a new version
+  (Deploy -> Manage deployments -> Edit). The `/exec` URL stays the same.
+- `add_person.py` NFC-normalizes text and drops non-`http(s)` profile URLs
+  (the URL lands in an `<a href>`).
 
 ## Content-model conventions — follow these when adding features
 
@@ -85,6 +137,12 @@ styles.scss               Brand theme; the whole palette derives from one
 - **Contact/Legal/Branding are single static pages**, edited directly —
   they're one-off content, not a repeating collection, so they
   intentionally don't use the listing pattern.
+
+- **All styling lives in `styles.scss`.** No `<style>` blocks, `style="..."`
+  attributes, or extra CSS files in pages — give the element a class and
+  add the rule to `styles.scss`, using the `$midsea-*` variables for brand
+  colours. For page-level tweaks, prefer a Quarto front-matter option (e.g.
+  `title-block-style: none` on Home) over CSS.
 
 ## Image naming convention
 

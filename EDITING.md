@@ -70,7 +70,7 @@ Same method again. Copy `_templates/training-template.qmd` into `training/`:
 
 The file `people/people.csv` lists all people. It is a spreadsheet-style
 file with one row per person. The columns are `name, title, institution,
-photo, profile_url, email`.
+photo, profile_url, email_sha256`.
 
 - Open `people/people.csv` (Excel, Google Sheets, Numbers, and GitHub's
   built-in editor all work).
@@ -79,18 +79,34 @@ photo, profile_url, email`.
 - Profile picture, in order of preference:
   - Add a photo to `images/people/`. In `photo`, write the path with a `/`
     at the start, for example `/images/people/jane-example.jpg`.
-  - Otherwise, leave `photo` blank and fill in `email`. The site then shows
-    that person's [Gravatar](https://gravatar.com), if they set one up. A
-    Gravatar is the avatar tied to their email at gravatar.com.
-  - If `photo` and `email` are blank, or the email has no Gravatar, the site
-    shows a generic placeholder avatar.
+  - Otherwise, the site shows the person's [Gravatar](https://gravatar.com),
+    if they set one up. A Gravatar is the avatar tied to their email at
+    gravatar.com. The application form fills in `email_sha256` for this. It is a
+    scrambled code made from the email, not the email itself.
+  - Never type a real email address into `people.csv`. The file is public
+    on the website. Leave `email_sha256` blank when you add a row by hand.
+  - If `photo` and `email_sha256` are blank, or the person has no Gravatar,
+    the site shows a generic placeholder avatar.
 - Save as CSV and commit.
 
-**Importing from the Google Form/Sheet:** When that is ready, export the
-Google Sheet as CSV (File → Download → Comma-separated values). Rename the
-columns to `name, title, institution, photo, profile_url, email` (or edit
-`people/index.qmd` to keep the sheet's own column names). Then replace
-`people/people.csv` with the export.
+**Member applications:** People apply on the website, at
+People → "Apply to join the directory". Each application lands in the
+applications Google Sheet with Status `Pending`. To publish one:
+
+1. Open the Sheet and check the row.
+2. Change Status to `Approved`. Within a few minutes the person is added
+   (or updated, if they applied before with the same email) and the site
+   republishes. The `Sent to GitHub` column shows when it went.
+3. To turn down an application, set Status to `Rejected`. Nothing is
+   published.
+
+If `Note` shows "Failed", the Sheet owner also gets an email. Fix the
+cause, then use the Sheet menu MIDSEA → "Send approved rows not yet sent".
+To correct a published person, fix the row in the Sheet, select it, and
+use MIDSEA → "Resend selected rows".
+
+Do not export the Sheet into `people.csv`. The Sheet contains plain email
+addresses.
 
 ## Edit the Contact page text
 
