@@ -35,8 +35,8 @@ website:
     center:
       - text: "Contact Us"
         href: contact/index.qmd
-      # - text: "Legal"
-      #   href: legal/index.qmd
+      - text: "Legal"
+        href: https://www.nus.edu.sg/legal-information-notices
     right:
       - text: "barathi.vadivelu@nus.edu.sg"
         href: "mailto:barathi.vadivelu@nus.edu.sg"
