@@ -5,6 +5,7 @@ title-block-banner: true
 listing:
   contents: .
   type: grid
+  grid-columns: 1
   sort: "date desc"
   fields: [image, event-dates, title, description, location]
   field-display-names:

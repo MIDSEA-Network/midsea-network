@@ -16,12 +16,10 @@ website:
   navbar:
     logo: images/logos/midsea-logo.png
     left:
-      - href: index.qmd
-        text: Home
+      - href: people/index.qmd
+        text: The Community
       - href: news/index.qmd
         text: News
-      - href: people/index.qmd
-        text: People
       - href: events/index.qmd
         text: Events
       - href: training/index.qmd
@@ -47,5 +45,6 @@ format:
       - cosmo
       - styles.scss
     toc: false
+    title-block-banner: true
     grid:
       body-width: 1000px
