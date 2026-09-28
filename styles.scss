@@ -19,6 +19,7 @@ $body-color: $midsea-text;
 
 .navbar-title {
   font-weight: 300;
+  margin-left: 1rem;
 }
 
 // Animated underline that grows in from the left on hover/active, echoing
@@ -61,14 +62,43 @@ main a:not(.nav-link):not(.quarto-grid-link):not(.navbar-brand):hover {
   background-image: url("images/hero-bg-lines.png");
   background-size: cover;
   background-position: center;
-  color: #ffffff;
   padding: 3rem 1.5rem;
-  border-radius: 8px;
+  border-radius: 0px;
   margin-bottom: 2rem;
+  
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
 
-  h1, p {
+  * {
     color: #ffffff;
   }
+}
+
+// Page title banners for index.qmd of each section
+#title-block-header {
+  background-image: url("images/hero-bg-lines.png");
+  background-size: cover;
+  background-position: center;
+
+  .quarto-title,
+  .quarto-title-meta,
+  .quarto-title-banner {
+    background-color: transparent !important;
+  }
+
+  * {
+    color: #ffffff !important;
+  }
+}
+
+
+// All headers
+h1, h2, h3, h4, h5, h6 {
+  color: $midsea-purple;
 }
 
 // Listing cards (News/Events/Training): soft asymmetric corners plus a
@@ -76,15 +106,15 @@ main a:not(.nav-link):not(.quarto-grid-link):not(.navbar-brand):hover {
 // midsea.network.
 .quarto-grid-item.card {
   overflow: hidden;
-  border: none;
+  border: 0.5px solid $midsea-purple;
   border-radius: 28px 8px 28px 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.08);
   transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
 }
 
 .quarto-grid-item.card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba($midsea-purple, 0.18);
+  box-shadow: 0px 12px 12px rgba($midsea-orange, 1);
 }
 
 .card-img-top {
@@ -104,6 +134,7 @@ main a:not(.nav-link):not(.quarto-grid-link):not(.navbar-brand):hover {
 // Category filter pills (Events page sidebar + card badges).
 .quarto-listing-category .category {
   border-radius: 6px;
+  padding: 0.25rem 0.75rem;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
@@ -119,7 +150,7 @@ main a:not(.nav-link):not(.quarto-grid-link):not(.navbar-brand):hover {
 
 .listing-categories .listing-category {
   background-color: $midsea-purple;
-  color: #ffffff;
+  color: #ffffff !important;
   font-weight: 600;
   border-radius: 6px;
   transition: background-color 0.2s ease-in-out;
