@@ -7,7 +7,7 @@ title-block-banner: true
 Researchers, students, public health professionals, and decision-makers from
 across the region working on infectious disease modelling.
 
-[Apply to join MIDSEA!](apply.qmd){.btn .btn-primary}
+[Apply to join MIDSEA!](https://forms.gle/uUoZ76dge3L8ZJEG6){.btn .btn-primary}
 
 ```{ojs}
 //| echo: false
