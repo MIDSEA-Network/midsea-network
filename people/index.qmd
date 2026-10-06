@@ -13,13 +13,13 @@ across the region working on infectious disease modelling.
 //| echo: false
 // Sorted by last name, taken as the last word of the name
 // ("Mamerto Jr. J. Brina" -> "Brina"); full name breaks ties.
-function lastName(name) {
-  return (name || "").trim().split(/\s+/).pop();
+function firstName(name) {
+  return (name || "").trim().split(/[\s,"]+/).at(0);
 }
 
 function byName(a, b) {
   const opts = {sensitivity: "base"};
-  return lastName(a.name).localeCompare(lastName(b.name), undefined, opts)
+  return firstName(a.name).localeCompare(firstName(b.name), undefined, opts)
     || (a.name || "").localeCompare(b.name || "", undefined, opts);
 }
 
