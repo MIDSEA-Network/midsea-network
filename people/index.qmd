@@ -11,7 +11,20 @@ across the region working on infectious disease modelling.
 
 ```{ojs}
 //| echo: false
+// Sorted by last name, taken as the last word of the name
+// ("Mamerto Jr. J. Brina" -> "Brina"); full name breaks ties.
+function lastName(name) {
+  return (name || "").trim().split(/\s+/).pop();
+}
+
+function byName(a, b) {
+  const opts = {sensitivity: "base"};
+  return lastName(a.name).localeCompare(lastName(b.name), undefined, opts)
+    || (a.name || "").localeCompare(b.name || "", undefined, opts);
+}
+
 people = FileAttachment("people.csv").csv({typed: false})
+  .then(rows => rows.sort(byName))
 
 // The site can be served under a subpath (GitHub Pages project page:
 // <org>.github.io/midsea-network/), so a "/images/..." path must resolve
