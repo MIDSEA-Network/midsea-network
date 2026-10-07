@@ -59,8 +59,8 @@ styles.scss               Brand theme; the whole palette derives from one
                           every push to main
 .github/workflows/add-person.yml
                           Approved application -> PR -> merge (see below)
-scripts/add_person.py     Upserts one people.csv row + photo from the
-                          add-person repository_dispatch payload
+scripts/add_person.py     Upserts one people.csv row + photo from one
+                          add-person payload (a JSON file argument)
 scripts/apps-script/Code.gs
                           Apps Script bound to the applications Google
                           Sheet; not run from the repo, kept here for
@@ -75,12 +75,41 @@ scripts/apps-script/Code.gs
 2. A maintainer sets Status to `Approved`. The installable `onStatusEdit`
    trigger sends a `repository_dispatch` event `add-person`, then writes
    `Sent to GitHub` (or the error in `Note`) on the row.
-3. `add-person.yml` runs `add_person.py` and the image check, commits
-   `people.csv` + `images/people/<slug>.<ext>` on a branch, and opens a
-   PR. `render-check.yml` runs on it (the `render` check that the
-   `protect-main` ruleset requires). The workflow waits for that check to
-   pass, then merges; the merge starts `publish.yml`. A failed check leaves
-   the PR open for a maintainer.
+3. `add-person.yml` has two jobs. `queue` checks the payload with
+   `add_person.py` and the image check, then saves it as the branch
+   `people-queue/<run id>` (one `payload.json`, no history). `process`
+   runs one at a time: it applies every queued payload, oldest first,
+   commits `people.csv` + `images/people/<slug>.<ext>` on one branch, and
+   opens one PR. `render-check.yml` runs on it (the `render` check that
+   the `protect-main` ruleset requires). The workflow waits for that check
+   to pass, merges, and then deletes the queue branches it applied; the
+   merge starts `publish.yml`. If the check fails, the workflow closes the
+   PR and keeps the queue, so the next run (or a re-run) tries again.
+4. `checkOnSite()` in `Code.gs` runs every 15 minutes (time trigger made
+   by `setup()`, also in the `MIDSEA` menu). It reads `people.csv` from
+   the published site (`CONFIG.siteUrl`) and fills the Sheet's `On site`
+   column: `Yes`, `Waiting` (sent under `CONFIG.publishMinutes` ago),
+   `Missing`, `Outdated` (details differ), or `Replaced` (a later row for
+   the same person was sent). It compares text the way `add_person.py`
+   writes it (NFC, collapsed spaces, non-http profile URL dropped); change
+   both together. Update `CONFIG.siteUrl` when the site moves to
+   midsea.network.
+
+- Do not go back to one run per person behind a plain `concurrency`
+  group. GitHub keeps only one waiting run per group and cancels the older
+  waiting one ("Canceling since a higher priority waiting request ...
+  exists"), so a mass approval lost every person but the first and last.
+  Now a cancelled run is harmless: its payload is already queued, and the
+  run that cancelled it processes it. Each run is named after its
+  applicant (`run-name`), so the Actions list shows whose run was
+  cancelled.
+- A queued payload that `add_person.py` rejects makes every later
+  `process` run fail. `queue` checks each payload first so this should not
+  happen; if it does, delete that `people-queue/<run id>` branch and resend
+  the row from the Sheet.
+- Do not add `git push --delete` for the PR branch: the repo deletes
+  merged head branches itself, and the explicit delete raced it and failed
+  the run.
 
 - The workflow uses the `PEOPLE_BOT_TOKEN` secret (fine-grained PAT, this
   repo only, Contents + Pull requests read/write), not `GITHUB_TOKEN`:
@@ -110,10 +139,12 @@ scripts/apps-script/Code.gs
   it cannot run as a Sheet formula. A hidden `website` honeypot field
   drops simple bot posts.
 - The Sheet's `MIDSEA` menu has "Send approved rows not yet sent" (retry
-  and bulk path) and "Resend selected rows" (after fixing a typo in the
-  Sheet).
+  and bulk path), "Resend selected rows" (after fixing a typo in the
+  Sheet, or for a `Missing` row), and "Check which rows are on the site".
 - After editing `Code.gs`, redeploy the web app as a new version
   (Deploy -> Manage deployments -> Edit). The `/exec` URL stays the same.
+  Then run `setup()` again: it appends columns added to `COLS` to the
+  existing Sheet and recreates the triggers.
 - `add_person.py` NFC-normalizes text and drops non-`http(s)` profile URLs
   (the URL lands in an `<a href>`).
 
