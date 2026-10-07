@@ -67,19 +67,44 @@ function photoUrl(p) {
 
 photoUrls = people.map(photoUrl)
 
-html`<div class="people-grid">
-  ${people.map((p, i) => html`
-    <div class="person-card">
-      <img src="${photoUrls[i]}" alt="${p.name}"
-        onerror="this.onerror=null;this.src='${placeholderAvatar}';">
-      <div class="person-card-body">
-        <h3>${p.profile_url && p.profile_url.trim()
-          ? html`<a href="${p.profile_url}">${boldFirstName(p.name)}</a>`
-          : boldFirstName(p.name)}</h3>
-        <p class="person-title">${p.title}</p>
-        <p class="person-institution">${p.institution}</p>
+// The Cards / Compact switch only toggles a class on the grid; the compact
+// layout (small round photo beside the name) lives in styles.scss.
+{
+  const grid = html`<div class="people-grid">
+    ${people.map((p, i) => html`
+      <div class="person-card">
+        <img src="${photoUrls[i]}" alt="${p.name}"
+          onerror="this.onerror=null;this.src='${placeholderAvatar}';">
+        <div class="person-card-body">
+          <h3>${p.profile_url && p.profile_url.trim()
+            ? html`<a href="${p.profile_url}">${boldFirstName(p.name)}</a>`
+            : boldFirstName(p.name)}</h3>
+          <p class="person-title">${p.title}</p>
+          <p class="person-institution">${p.institution}</p>
+        </div>
       </div>
+    `)}
+  </div>`;
+
+  const toolbar = html`<div class="people-toolbar">
+    <div class="btn-group btn-group-sm" role="group" aria-label="People view">
+      <input type="radio" class="btn-check" name="people-view"
+        id="people-view-cards" value="cards" checked>
+      <label class="btn btn-outline-primary" for="people-view-cards">
+        <i class="bi bi-grid-3x3-gap" aria-hidden="true"></i> Cards
+      </label>
+      <input type="radio" class="btn-check" name="people-view"
+        id="people-view-compact" value="compact">
+      <label class="btn btn-outline-primary" for="people-view-compact">
+        <i class="bi bi-list-ul" aria-hidden="true"></i> Compact
+      </label>
     </div>
-  `)}
-</div>`
+  </div>`;
+
+  toolbar.addEventListener("change", e => {
+    grid.classList.toggle("people-grid-compact", e.target.value === "compact");
+  });
+
+  return html`<div class="people-directory">${toolbar}${grid}</div>`;
+}
 ```

@@ -228,6 +228,49 @@ h6 {
   margin: 0;
 }
 
+// Cards / Compact switch above the people grid.
+.people-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+// Compact people view: a small round photo beside the name and more
+// people per row, so the whole directory can be skimmed with little
+// scrolling.
+.people-grid.people-grid-compact {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.5rem 1rem;
+
+  .person-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-radius: 14px 4px 14px 4px;
+  }
+
+  .person-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .person-card img {
+    flex: none;
+    width: 48px;
+    border-radius: 50%;
+  }
+
+  .person-card:hover img {
+    transform: none;
+  }
+
+  .person-card-body {
+    padding: 0;
+    min-width: 0;
+  }
+}
+
 // Member application form (people/apply.qmd).
 .apply-form {
   max-width: 640px;

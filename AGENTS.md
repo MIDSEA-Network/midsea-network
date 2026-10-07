@@ -28,7 +28,8 @@ events/*.qmd              One file per event (front matter: title, date,
                           event-dates, location, image, description,
                           categories)
 people/index.qmd        People directory — renders people/people.csv as
-                          cards via an OJS (Observable JS) code block
+                          cards via an OJS (Observable JS) code block, with
+                          a Cards / Compact view switch
 people/people.csv        One row per person: name, title, institution,
                           photo, profile_url, email_sha256
 people/apply.qmd         Member application form; POSTs to the Apps Script
