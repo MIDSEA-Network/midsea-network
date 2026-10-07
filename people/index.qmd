@@ -11,10 +11,22 @@ across the region working on infectious disease modelling.
 
 ```{ojs}
 //| echo: false
-// Sorted by last name, taken as the last word of the name
-// ("Mamerto Jr. J. Brina" -> "Brina"); full name breaks ties.
+// Split a display name into its first word and the remainder
+// ("Mamerto Jr. J. Brina" -> "Mamerto", " Jr. J. Brina");
+// the comma/whitespace separators match the old firstName() split.
+function splitName(name) {
+  const m = (name || "").trim().match(/^([^\s,"]+)([\s\S]*)$/);
+  return m ? {first: m[1], rest: m[2]} : {first: (name || "").trim(), rest: ""};
+}
+
 function firstName(name) {
-  return (name || "").trim().split(/[\s,"]+/).at(0);
+  return splitName(name).first;
+}
+
+// Wrap the first word of a display name so styles.scss can bold it
+function boldFirstName(name) {
+  const {first, rest} = splitName(name);
+  return html`<span class="person-first-name">${first}</span>${rest}`;
 }
 
 function byName(a, b) {
@@ -62,8 +74,8 @@ html`<div class="people-grid">
         onerror="this.onerror=null;this.src='${placeholderAvatar}';">
       <div class="person-card-body">
         <h3>${p.profile_url && p.profile_url.trim()
-          ? html`<a href="${p.profile_url}">${p.name}</a>`
-          : p.name}</h3>
+          ? html`<a href="${p.profile_url}">${boldFirstName(p.name)}</a>`
+          : boldFirstName(p.name)}</h3>
         <p class="person-title">${p.title}</p>
         <p class="person-institution">${p.institution}</p>
       </div>
