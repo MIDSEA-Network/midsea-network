@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """Add or update one person in people/people.csv from an approved application.
 
-Reads the `repository_dispatch` event that `scripts/apps-script/Code.gs`
-sends when a maintainer approves a row in the applications Google Sheet
-(the file at $GITHUB_EVENT_PATH). Its `client_payload` holds:
+Usage: add_person.py PAYLOAD_JSON
+
+PAYLOAD_JSON is the `client_payload` of the `repository_dispatch` event that
+`scripts/apps-script/Code.gs` sends when a maintainer approves a row in the
+applications Google Sheet. The add-person workflow saves it to a queue
+branch, then runs this script once per queued application. It holds:
 
     name, title, institution, profile_url   plain strings
     email_sha256                            SHA-256 hex of the lower-cased email
@@ -15,13 +18,12 @@ email_sha256, else by name.
 A match is updated in place, so a person can apply again to change
 their details. A new photo is written to images/people/<slug>.<ext>.
 
-Writes `action=added|updated` and `name=<name>` to $GITHUB_OUTPUT.
+Prints `added <name>` or `updated <name>` to stdout.
 """
 
 import base64
 import csv
 import json
-import os
 import re
 import sys
 import unicodedata
@@ -44,6 +46,7 @@ def fail(msg: str) -> None:
 
 def clean(value) -> str:
     # NFC so Vietnamese names typed on different devices compare equal.
+    # checkOnSite() in Code.gs compares Sheet rows the same way; keep in step.
     text = unicodedata.normalize("NFC", str(value or "")).strip()
     return re.sub(r"\s+", " ", text)[:MAX_LEN]
 
@@ -56,9 +59,10 @@ def slugify(name: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", ascii_name.lower()).strip("-")
 
 
-def main() -> int:
-    event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text("utf-8"))
-    payload = event.get("client_payload") or {}
+def main(argv) -> int:
+    if len(argv) != 2:
+        fail("usage: add_person.py PAYLOAD_JSON")
+    payload = json.loads(Path(argv[1]).read_text("utf-8")) or {}
 
     person = {field: clean(payload.get(field)) for field in TEXT_FIELDS}
     person["email_sha256"] = person["email_sha256"].lower()
@@ -68,7 +72,7 @@ def main() -> int:
         fail("payload has no name")
     # The URL lands in an <a href>, so only allow http(s) (blocks javascript:).
     if person["profile_url"] and not re.match(r"^https?://", person["profile_url"]):
-        print(f"warning: dropping non-http profile_url {person['profile_url']!r}")
+        print(f"warning: dropping non-http profile_url {person['profile_url']!r}", file=sys.stderr)
         person["profile_url"] = ""
 
     slug = slugify(person["name"])
@@ -122,11 +126,8 @@ def main() -> int:
 
     action = "updated" if existing is not None else "added"
     print(f"{action} {person['name']}")
-    if "GITHUB_OUTPUT" in os.environ:
-        with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
-            out.write(f"action={action}\nname={person['name']}\n")
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv))

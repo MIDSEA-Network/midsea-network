@@ -96,9 +96,25 @@ applications Google Sheet with Status `Pending`. To publish one:
 1. Open the Sheet and check the row.
 2. Change Status to `Approved`. Within a few minutes the person is added
    (or updated, if they applied before with the same email) and the site
-   republishes. The `Sent to GitHub` column shows when it went.
+   republishes. The `Sent to GitHub` column shows when it went. You can
+   approve many rows at once. In GitHub's Actions tab, some of those runs
+   then show as "cancelled". That is normal: another run adds their
+   people.
 3. To turn down an application, set Status to `Rejected`. Nothing is
    published.
+
+The `On site` column checks the published website every 15 minutes (or
+now, with MIDSEA → "Check which rows are on the site"):
+
+- `Yes`: the person is on the site with the details in this row.
+- `Waiting`: sent less than 30 minutes ago. Check again later.
+- `Missing`: sent, but not on the site. Select the row and use
+  MIDSEA → "Resend selected rows".
+- `Outdated`: on the site, but with other details, for example because
+  you fixed a typo in the Sheet. Resend the row.
+- `Replaced`: the same person applied again, and a later row was sent.
+  Nothing to do.
+- Blank: the row is not approved, or not sent yet.
 
 If `Note` shows "Failed", the Sheet owner also gets an email. Fix the
 cause, then use the Sheet menu MIDSEA → "Send approved rows not yet sent".

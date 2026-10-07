@@ -10,6 +10,9 @@
  *   3. .github/workflows/add-person.yml writes the row to people/people.csv
  *      and the photo, opens a PR, waits for the render check, and merges.
  *      The merge republishes the site.
+ *   4. checkOnSite() runs every 15 minutes. It reads people.csv from the
+ *      published site and fills the "On site" column, so a sent row that
+ *      never appeared shows as "Missing".
  *
  * Anyone with edit access to the Sheet can approve, so share it only with
  * maintainers.
@@ -23,7 +26,8 @@
  *   4. Deploy -> New deployment -> Web app. Execute as: Me. Who has access:
  *      Anyone. Copy the /exec URL into ENDPOINT in people/apply.qmd.
  *   5. After a later change to this file: Deploy -> Manage deployments ->
- *      Edit -> Version: New version. The URL stays the same.
+ *      Edit -> Version: New version. The URL stays the same. Then run
+ *      setup() again: it adds new columns and triggers and keeps the data.
  */
 
 const CONFIG = {
@@ -39,9 +43,24 @@ const CONFIG = {
   maxLen: 200,
   // Who gets an email when a dispatch fails. Blank = the script owner.
   notifyEmail: '',
+  // The published site. checkOnSite() reads <siteUrl>/people/people.csv.
+  // Change it when the site moves to its own domain.
+  siteUrl: 'https://midsea-network.github.io/midsea-network/',
+  // A sent row not on the site after this many minutes shows as Missing.
+  // A run takes about 10 minutes; a mass approval adds a run or two.
+  publishMinutes: 30,
 };
 
 const STATUS = { pending: 'Pending', approved: 'Approved', rejected: 'Rejected' };
+
+// Values of the "On site" column. Blank: not approved, or not sent.
+const ON_SITE = {
+  yes: 'Yes', // on the site with this row's details
+  waiting: 'Waiting', // sent less than CONFIG.publishMinutes ago
+  missing: 'Missing', // not on the site: resend the row
+  outdated: 'Outdated', // on the site, but with other details: resend the row
+  replaced: 'Replaced', // a later row for the same person was sent
+};
 
 // Columns are found by header text, so they can be reordered in the Sheet.
 const COLS = {
@@ -54,6 +73,7 @@ const COLS = {
   photo_id: 'Photo file ID',
   status: 'Status',
   sent: 'Sent to GitHub',
+  onSite: 'On site',
   note: 'Note',
 };
 
@@ -64,9 +84,16 @@ function setup() {
   let sheet = ss.getSheetByName(CONFIG.sheetName);
   if (!sheet) {
     sheet = ss.insertSheet(CONFIG.sheetName);
-    sheet.appendRow(Object.values(COLS));
     sheet.setFrozenRows(1);
-    sheet.getRange(1, 1, 1, sheet.getLastColumn()).setFontWeight('bold');
+  }
+  // A new Sheet gets every column; an older one gets the columns added
+  // since, at the end.
+  const missing = Object.values(COLS).filter((h) => !headers_(sheet).includes(h));
+  if (missing.length) {
+    const start = sheet.getLastColumn() + 1;
+    const extra = start + missing.length - 1 - sheet.getMaxColumns();
+    if (extra > 0) sheet.insertColumnsAfter(sheet.getMaxColumns(), extra);
+    sheet.getRange(1, start, 1, missing.length).setValues([missing]).setFontWeight('bold');
   }
   const statusCol = colIndex_(sheet, COLS.status);
   const rule = SpreadsheetApp.newDataValidation()
@@ -81,10 +108,11 @@ function setup() {
   }
 
   ScriptApp.getProjectTriggers()
-    .filter((t) => t.getHandlerFunction() === 'onStatusEdit')
+    .filter((t) => ['onStatusEdit', 'checkOnSite'].includes(t.getHandlerFunction()))
     .forEach((t) => ScriptApp.deleteTrigger(t));
   // An installable trigger, because a simple onEdit cannot call UrlFetchApp.
   ScriptApp.newTrigger('onStatusEdit').forSpreadsheet(ss).onEdit().create();
+  ScriptApp.newTrigger('checkOnSite').timeBased().everyMinutes(15).create();
 }
 
 function onOpen() {
@@ -92,6 +120,7 @@ function onOpen() {
     .createMenu('MIDSEA')
     .addItem('Send approved rows not yet sent', 'sendPendingApproved')
     .addItem('Resend selected rows', 'resendSelected')
+    .addItem('Check which rows are on the site', 'checkOnSite')
     .addToUi();
 }
 
@@ -185,8 +214,8 @@ function sendPendingApproved() {
   const statusCol = colIndex_(sheet, COLS.status);
   const sentCol = colIndex_(sheet, COLS.sent);
   const values = sheet.getDataRange().getValues();
-  // Each dispatch starts one workflow run; the workflow's concurrency group
-  // runs them one after another.
+  // Each dispatch starts one workflow run. The workflow queues every
+  // application first, so a burst of dispatches loses none.
   for (let i = 1; i < values.length; i++) {
     if (values[i][statusCol - 1] === STATUS.approved && !values[i][sentCol - 1]) {
       sendRowSafely_(sheet, i + 1);
@@ -232,20 +261,11 @@ function sendRowSafely_(sheet, r) {
 function sendRow_(sheet, r) {
   const headers = headers_(sheet);
   const values = sheet.getRange(r, 1, 1, headers.length).getValues()[0];
-  const get = (col) => text_(values[headers.indexOf(col)]);
 
-  const payload = {
-    name: uncell_(get(COLS.name)),
-    title: uncell_(get(COLS.title)),
-    institution: uncell_(get(COLS.institution)),
-    profile_url: uncell_(get(COLS.profile_url)),
-    // Only the hash leaves Google: people.csv is public. Gravatar looks up
-    // avatars by the same hash, and it matches resubmissions to a row.
-    email_sha256: sha256Hex_(uncell_(get(COLS.email)).toLowerCase()),
-  };
+  const payload = personFromRow_(headers, values);
   if (!payload.name) throw new Error('Row has no name.');
 
-  const photoId = get(COLS.photo_id);
+  const photoId = text_(values[headers.indexOf(COLS.photo_id)]);
   if (photoId) {
     const blob = DriveApp.getFileById(photoId).getBlob();
     payload.photo_b64 = Utilities.base64Encode(blob.getBytes());
@@ -283,7 +303,105 @@ function dispatch_(json) {
   }
 }
 
+// ---------------------------------------------------------------- on site
+
+const SITE_FIELDS = ['name', 'title', 'institution', 'profile_url'];
+
+/** Timer and menu: fill "On site" from people.csv on the published site. */
+function checkOnSite() {
+  const sheet = sheet_();
+  const headers = headers_(sheet);
+  const at = (h) => colIndex_(sheet, h) - 1;
+  const onSiteCol = at(COLS.onSite) + 1;
+  const values = sheet.getDataRange().getValues().slice(1);
+  if (!values.length) return;
+
+  const rows = values.map((v) => {
+    if (v[at(COLS.status)] !== STATUS.approved || !v[at(COLS.sent)]) return null;
+    const person = personFromRow_(headers, v);
+    return { person, sent: new Date(v[at(COLS.sent)]).getTime(), key: personKey_(person) };
+  });
+  // The latest send for a person is the one the site should show.
+  const latest = new Map();
+  rows.forEach((row) => {
+    if (row && !(latest.has(row.key) && latest.get(row.key).sent >= row.sent)) {
+      latest.set(row.key, row);
+    }
+  });
+
+  const site = latest.size ? siteRows_() : [];
+  const byKey = new Map();
+  site.forEach((p) => {
+    // add_person.py matches on the email hash, else on the name.
+    if (p.email_sha256) byKey.set(`email:${p.email_sha256.toLowerCase()}`, p);
+    byKey.set(`name:${same_(p.name).toLowerCase()}`, p);
+  });
+
+  const now = Date.now();
+  const out = rows.map((row) => {
+    if (!row) return [''];
+    if (latest.get(row.key) !== row) return [ON_SITE.replaced];
+    const shown = byKey.get(row.key);
+    let state = ON_SITE.missing;
+    if (shown) {
+      const want = siteView_(row.person);
+      const match = SITE_FIELDS.every((f) => same_(shown[f]) === want[f]);
+      state = match ? ON_SITE.yes : ON_SITE.outdated;
+    }
+    if (state !== ON_SITE.yes && now - row.sent < CONFIG.publishMinutes * 60000) {
+      state = ON_SITE.waiting;
+    }
+    return [state];
+  });
+  sheet.getRange(2, onSiteCol, out.length, 1).setValues(out);
+}
+
+/** The published people.csv, as one object per row keyed by header. */
+function siteRows_() {
+  // The query string skips the CDN cache (max-age 10 minutes).
+  const url = `${CONFIG.siteUrl.replace(/\/$/, '')}/people/people.csv?t=${Date.now()}`;
+  const res = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
+  if (res.getResponseCode() !== 200) {
+    throw new Error(`Could not read ${url} (${res.getResponseCode()}).`);
+  }
+  const [header, ...rows] = Utilities.parseCsv(res.getContentText('UTF-8'));
+  return rows.map((r) => Object.fromEntries(header.map((h, i) => [h, r[i] || ''])));
+}
+
+function personKey_(person) {
+  if (person.email_sha256) return `email:${person.email_sha256}`;
+  return `name:${same_(person.name).toLowerCase()}`;
+}
+
+/** The row as add_person.py writes it to people.csv. */
+function siteView_(person) {
+  const view = {};
+  SITE_FIELDS.forEach((f) => (view[f] = same_(person[f])));
+  // add_person.py drops a profile URL that does not start with http(s)://.
+  if (!/^https?:\/\//.test(view.profile_url)) view.profile_url = '';
+  return view;
+}
+
+/** Text in the form add_person.py compares: NFC, single spaces, trimmed. */
+function same_(value) {
+  return text_(value).normalize('NFC');
+}
+
 // ---------------------------------------------------------------- helpers
+
+/** The fields sent to GitHub for one Sheet row. */
+function personFromRow_(headers, values) {
+  const get = (col) => uncell_(text_(values[headers.indexOf(col)]));
+  return {
+    name: get(COLS.name),
+    title: get(COLS.title),
+    institution: get(COLS.institution),
+    profile_url: get(COLS.profile_url),
+    // Only the hash leaves Google: people.csv is public. Gravatar looks up
+    // avatars by the same hash, and it matches resubmissions to a row.
+    email_sha256: sha256Hex_(get(COLS.email).toLowerCase()),
+  };
+}
 
 function sheet_() {
   const sheet = SpreadsheetApp.getActive().getSheetByName(CONFIG.sheetName);
@@ -292,12 +410,13 @@ function sheet_() {
 }
 
 function headers_(sheet) {
-  return sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].map(String);
+  const n = sheet.getLastColumn();
+  return n ? sheet.getRange(1, 1, 1, n).getValues()[0].map(String) : [];
 }
 
 function colIndex_(sheet, header) {
   const i = headers_(sheet).indexOf(header);
-  if (i < 0) throw new Error(`Column "${header}" is missing from the Sheet.`);
+  if (i < 0) throw new Error(`Column "${header}" is missing from the Sheet. Run setup() to add it.`);
   return i + 1;
 }
 

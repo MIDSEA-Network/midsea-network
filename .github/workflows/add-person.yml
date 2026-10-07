@@ -3,11 +3,7 @@ on:
     types: [add-person]
 
 name: Add approved member to People
-
-# Two approvals close together must not race on people.csv.
-concurrency:
-  group: people-csv
-  cancel-in-progress: false
+run-name: Add ${{ github.event.client_payload.name }} to People
 
 # The protect-main ruleset requires a PR with a passing `render` check, and
 # GITHUB_TOKEN may neither bypass it nor open PRs. So every git/gh call here
@@ -17,16 +13,25 @@ concurrency:
 #
 # Approval happens in the applications Google Sheet: the Apps Script only
 # dispatches rows a maintainer set to "Approved".
+#
+# A concurrency group keeps one run going and one waiting; a newer run
+# cancels the waiting one. So a run must not carry its own application to
+# the end, or a mass approval loses all but the first and last. Instead:
+#   queue    saves this run's application as branch people-queue/<run id>.
+#            No lock, so a burst of approvals all get queued.
+#   process  one at a time: adds every queued application in one PR, merges
+#            it, then deletes those queue branches. If a newer run cancels
+#            this one while it waits, the newer run processes its
+#            application. A failed run leaves the queue for the next run.
 
 permissions:
   contents: read
 
 jobs:
-  add-person:
+  queue:
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ secrets.PEOPLE_BOT_TOKEN }}
-      BRANCH: add-person/${{ github.run_id }}
+      QUEUE_BRANCH: people-queue/${{ github.run_id }}
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -34,18 +39,58 @@ jobs:
           ref: main
           token: ${{ secrets.PEOPLE_BOT_TOKEN }}
 
-      - name: Add person to people.csv
+      # Reject a bad application here, on its own run, so it never blocks
+      # the queue.
+      - name: Check the application
+        run: |
+          jq '.client_payload' "$GITHUB_EVENT_PATH" > "$RUNNER_TEMP/payload.json"
+          python3 scripts/add_person.py "$RUNNER_TEMP/payload.json"
+          python3 scripts/check_image_links.py
+
+      - name: Add the application to the queue
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          blob=$(git hash-object -w "$RUNNER_TEMP/payload.json")
+          tree=$(printf '100644 blob %s\tpayload.json\n' "$blob" | git mktree)
+          commit=$(git commit-tree "$tree" -m "Queued application")
+          git push --force origin "${commit}:refs/heads/${QUEUE_BRANCH}"
+
+  process:
+    needs: queue
+    runs-on: ubuntu-latest
+    concurrency:
+      group: people-csv
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ secrets.PEOPLE_BOT_TOKEN }}
+      BRANCH: add-person/${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          token: ${{ secrets.PEOPLE_BOT_TOKEN }}
+
+      # Oldest first, so a later application from the same person wins.
+      - name: Add queued applications to people.csv
         id: add
-        run: python3 scripts/add_person.py
+        run: |
+          git fetch --no-tags origin '+refs/heads/people-queue/*:refs/people-queue/*'
+          ids=$(git for-each-ref --format='%(refname:lstrip=2)' refs/people-queue/ | sort -n)
+          touch "$RUNNER_TEMP/added.txt"
+          for id in $ids; do
+            git show "refs/people-queue/$id:payload.json" > "$RUNNER_TEMP/queued.json"
+            python3 scripts/add_person.py "$RUNNER_TEMP/queued.json" >> "$RUNNER_TEMP/added.txt"
+          done
+          cat "$RUNNER_TEMP/added.txt"
+          echo "ids=$(echo $ids)" >> "$GITHUB_OUTPUT"
 
       - name: Verify all referenced images exist
         run: python3 scripts/check_image_links.py
 
       - name: Commit and open PR
         id: pr
-        env:
-          PERSON_NAME: ${{ steps.add.outputs.name }}
-          ACTION: ${{ steps.add.outputs.action }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -56,35 +101,59 @@ jobs:
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          git commit -m "People: $ACTION $PERSON_NAME from approved application"
+          count=$(grep -c "" "$RUNNER_TEMP/added.txt")
+          if [ "$count" -eq 1 ]; then
+            title="People: $(cat "$RUNNER_TEMP/added.txt")"
+            subject="$title from approved application"
+          else
+            title="People: $count approved applications"
+            subject=$title
+          fi
+          list=$(sed 's/^/- /' "$RUNNER_TEMP/added.txt")
+          git commit -m "$subject" -m "$list"
           git push origin "$BRANCH"
-          gh pr create --base main --head "$BRANCH" \
-            --title "People: $ACTION $PERSON_NAME" \
-            --body "Approved in the member applications Sheet. Merged by the add-person workflow once the render check passes."
+          gh pr create --base main --head "$BRANCH" --title "$title" \
+            --body "Approved in the member applications Sheet. Merged by the add-person workflow once the render check passes.
+
+          $list"
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
       # The PAT owner may be a ruleset bypass actor, whose merge would not
-      # wait for the check, so wait here explicitly.
+      # wait for the check, so wait here explicitly. On failure the
+      # applications stay queued, so close this PR: the next run (or a
+      # re-run of this one) opens a fresh PR with all of them.
       - name: Wait for render check
         if: steps.pr.outputs.changed == 'true'
         env:
           SHA: ${{ steps.pr.outputs.sha }}
         run: |
+          give_up() {
+            echo "::error::$1 Applications stay queued; re-run this workflow once fixed."
+            gh pr close "$BRANCH" --delete-branch --comment "$1 The applications stay queued for the next add-person run."
+            exit 1
+          }
           for _ in $(seq 120); do
             result=$(gh api "repos/$GITHUB_REPOSITORY/commits/$SHA/check-runs?check_name=render" \
               --jq '.check_runs[0] | "\(.status) \(.conclusion)"')
             case "$result" in
               "completed success") echo "Render check passed."; exit 0 ;;
-              completed*) echo "::error::Render check failed ($result). PR left open for a maintainer."; exit 1 ;;
+              completed*) give_up "Render check failed ($result)." ;;
             esac
             sleep 10
           done
-          echo "::error::Render check did not finish in 20 minutes. PR left open."
-          exit 1
+          give_up "Render check did not finish in 20 minutes."
 
+      # The repo deletes merged head branches itself.
       - name: Merge PR
         if: steps.pr.outputs.changed == 'true'
+        run: gh pr merge "$BRANCH" --merge
+
+      - name: Remove processed applications from the queue
+        if: steps.add.outputs.ids != ''
+        env:
+          IDS: ${{ steps.add.outputs.ids }}
         run: |
-          gh pr merge "$BRANCH" --merge
-          git push origin --delete "$BRANCH"
+          refs=()
+          for id in $IDS; do refs+=("refs/heads/people-queue/$id"); done
+          git push origin --delete "${refs[@]}"
