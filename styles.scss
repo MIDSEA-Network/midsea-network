@@ -221,6 +221,13 @@ h6 {
   font-weight: bold;
 }
 
+// Small arrow after a name whose profile link opens in a new tab.
+.person-link-icon {
+  font-size: 0.7em;
+  margin-left: 0.3em;
+  vertical-align: 0.15em;
+}
+
 .person-title,
 .person-institution {
   font-size: 0.85rem;
