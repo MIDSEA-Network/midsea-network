@@ -2,57 +2,10 @@
   {
     "listing": "/training/index.html",
     "items": [
+      "/training/2027-midsea-summer-school.html",
       "/training/2026-midsea-summer-school.html",
       "/training/2025-midsea-summer-school.html",
       "/training/2024-midsea-summer-school.html"
-    ]
-  },
-  {
-    "listing": "/news/index.html",
-    "items": [
-      "/news/2027-midsea-summer-school.html",
-      "/news/2026-midsea-summer-school.html",
-      "/news/20260512-tf-readi.html",
-      "/news/2025-midsea-summer-school.html",
-      "/news/2024-hiper-symposium.html"
-    ]
-  },
-  {
-    "listing": "/events/index.html",
-    "items": [
-      "/events/2026-climate-health-webinar.html",
-      "/events/20260915-virtual-gathering.html",
-      "/events/202605-fiesta.html",
-      "/events/webinar-research-20260415.html",
-      "/events/webinar-research-20260219.html",
-      "/events/webinar-research-20251015.html",
-      "/events/webinar-research-20250917.html",
-      "/events/webinar-research-20250813.html",
-      "/events/webinar-research-20250618.html",
-      "/events/webinar-research-20250514.html",
-      "/events/webinar-research-20250423.html",
-      "/events/webinar-research-20250312.html",
-      "/events/webinar-research-20250212.html",
-      "/events/webinar-research-20250115.html",
-      "/events/webinar-research-20241211.html",
-      "/events/webinar-research-20241016.html",
-      "/events/webinar-research-20240911.html",
-      "/events/webinar-research-20240814.html",
-      "/events/webinar-research-20240717.html",
-      "/events/webinar-research-20240515.html",
-      "/events/webinar-research-20240417.html",
-      "/events/webinar-research-20240320.html",
-      "/events/webinar-research-20240221.html",
-      "/events/webinar-research-20231018.html",
-      "/events/webinar-research-20230920.html",
-      "/events/webinar-research-20230816.html",
-      "/events/webinar-research-20230524.html",
-      "/events/2023-koh-samui-workshop.html",
-      "/events/webinar-research-20230419.html",
-      "/events/webinar-research-20230315.html",
-      "/events/webinar-research-20230215.html",
-      "/events/webinar-research-20230118.html",
-      "/events/webinar-research-20221221.html"
     ]
   },
   {
@@ -96,6 +49,54 @@
       "/events/webinar-research-20230215.html",
       "/events/webinar-research-20230118.html",
       "/events/webinar-research-20221221.html"
+    ]
+  },
+  {
+    "listing": "/events/index.html",
+    "items": [
+      "/events/2026-climate-health-webinar.html",
+      "/events/20260915-virtual-gathering.html",
+      "/events/202605-fiesta.html",
+      "/events/webinar-research-20260415.html",
+      "/events/webinar-research-20260219.html",
+      "/events/webinar-research-20251015.html",
+      "/events/webinar-research-20250917.html",
+      "/events/webinar-research-20250813.html",
+      "/events/webinar-research-20250618.html",
+      "/events/webinar-research-20250514.html",
+      "/events/webinar-research-20250423.html",
+      "/events/webinar-research-20250312.html",
+      "/events/webinar-research-20250212.html",
+      "/events/webinar-research-20250115.html",
+      "/events/webinar-research-20241211.html",
+      "/events/webinar-research-20241016.html",
+      "/events/webinar-research-20240911.html",
+      "/events/webinar-research-20240814.html",
+      "/events/webinar-research-20240717.html",
+      "/events/webinar-research-20240515.html",
+      "/events/webinar-research-20240417.html",
+      "/events/webinar-research-20240320.html",
+      "/events/webinar-research-20240221.html",
+      "/events/webinar-research-20231018.html",
+      "/events/webinar-research-20230920.html",
+      "/events/webinar-research-20230816.html",
+      "/events/webinar-research-20230524.html",
+      "/events/2023-koh-samui-workshop.html",
+      "/events/webinar-research-20230419.html",
+      "/events/webinar-research-20230315.html",
+      "/events/webinar-research-20230215.html",
+      "/events/webinar-research-20230118.html",
+      "/events/webinar-research-20221221.html"
+    ]
+  },
+  {
+    "listing": "/news/index.html",
+    "items": [
+      "/news/2027-midsea-summer-school.html",
+      "/news/2026-midsea-summer-school.html",
+      "/news/20260512-tf-readi.html",
+      "/news/2025-midsea-summer-school.html",
+      "/news/2024-hiper-symposium.html"
     ]
   }
 ]
