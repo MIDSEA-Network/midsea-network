@@ -7,11 +7,12 @@ project:
     - "!AGENTS.md"
   resources:
     - images
+    - CNAME
 
 website:
   title: "MIDSEA Network"
   description: "Modelling Infectious Diseases in South East Asia"
-  # site-url: "https://midsea.network"
+  site-url: "https://midsea.network"
   favicon: images/logos/favicon.png
   navbar:
     logo: images/logos/midsea-logo.png
