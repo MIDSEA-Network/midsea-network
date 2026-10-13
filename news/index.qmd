@@ -5,6 +5,7 @@ title-block-banner: true
 listing:
   contents: .
   type: grid
+  grid-columns: 2
   sort: "date desc"
   date-format: "D MMMM YYYY"
   fields: [image, date, title, description]
