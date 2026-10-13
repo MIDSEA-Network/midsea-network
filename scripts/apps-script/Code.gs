@@ -45,7 +45,7 @@ const CONFIG = {
   notifyEmail: '',
   // The published site. checkOnSite() reads <siteUrl>/people/people.csv.
   // Change it when the site moves to its own domain.
-  siteUrl: 'https://midsea-network.github.io/midsea-network/',
+  siteUrl: 'https://midsea.network/',
   // A sent row not on the site after this many minutes shows as Missing.
   // A run takes about 10 minutes; a mass approval adds a run or two.
   publishMinutes: 30,
