@@ -10,6 +10,7 @@
   {
     "listing": "/news/index.html",
     "items": [
+      "/news/2027-midsea-summer-school.html",
       "/news/2026-midsea-summer-school.html",
       "/news/20260512-tf-readi.html",
       "/news/2025-midsea-summer-school.html",
@@ -17,12 +18,8 @@
     ]
   },
   {
-    "listing": "/index.html",
+    "listing": "/events/index.html",
     "items": [
-      "/news/2026-midsea-summer-school.html",
-      "/news/20260512-tf-readi.html",
-      "/news/2025-midsea-summer-school.html",
-      "/news/2024-hiper-symposium.html",
       "/events/2026-climate-health-webinar.html",
       "/events/20260915-virtual-gathering.html",
       "/events/202605-fiesta.html",
@@ -59,8 +56,13 @@
     ]
   },
   {
-    "listing": "/events/index.html",
+    "listing": "/index.html",
     "items": [
+      "/news/2027-midsea-summer-school.html",
+      "/news/2026-midsea-summer-school.html",
+      "/news/20260512-tf-readi.html",
+      "/news/2025-midsea-summer-school.html",
+      "/news/2024-hiper-symposium.html",
       "/events/2026-climate-health-webinar.html",
       "/events/20260915-virtual-gathering.html",
       "/events/202605-fiesta.html",
