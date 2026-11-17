@@ -1,5 +1,5 @@
 ---
-title: "The Community"
+title: "The People"
 page-layout: full
 title-block-banner: true
 ---
