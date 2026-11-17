@@ -17,8 +17,12 @@ website:
   navbar:
     logo: images/logos/midsea-logo.png
     left:
-      - href: people/index.qmd
-        text: The Community
+      - text: The Community
+        menu:
+          - href: community/index.qmd
+            text: Philosophy and Governance
+          - href: people/index.qmd
+            text: The People            
       - href: news/index.qmd
         text: News
       - href: events/index.qmd
