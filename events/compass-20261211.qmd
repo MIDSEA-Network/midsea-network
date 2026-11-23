@@ -1,0 +1,12 @@
+---
+title: "Wellcome Early Career Awards practice presentation [Phrutsamon Wongnak & Bimandra A. Djaafara]"
+date: 2026-11-23
+event-dates: "11 December 2026"
+location: "Online"
+image: ../images/events/compass/compass-20261211.png
+description: "[Members only] - Safe space to get support for career development as part of the Community of Modellers for Peer Advice, Support & Skills (COMPASS) program."
+categories: [Online Events, Seminars]
+---
+
+![](../images/events/compass/compass-20261211.png)
+

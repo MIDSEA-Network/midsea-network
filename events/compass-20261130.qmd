@@ -1,0 +1,12 @@
+---
+title: "PhD viva presentation practice [Thinh Ong]"
+date: 2026-11-23
+event-dates: "30 November 2026"
+location: "Online"
+image: ../images/events/compass/compass-20261130.png
+description: "[Members only] - Safe space to get support for career development as part of the Community of Modellers for Peer Advice, Support & Skills (COMPASS) program."
+categories: [Online Events, Seminars]
+---
+
+![](../images/events/compass/compass-20261130.png)
+
